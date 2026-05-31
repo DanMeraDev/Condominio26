@@ -152,7 +152,7 @@ Administrador
 5. El Sistema registra el rol con sus permisos.
 6. El caso de uso termina cuando el Sistema muestra el mensaje "Permisos del rol registrados exitosamente".
 
-## Escenarios Alternativos 
+## Escenarios Alternativos
 
 ### A1. Editar permisos de un rol existente
 
@@ -240,7 +240,70 @@ Usuario, Administrador
 
 # CU-08 Recuperar Contraseña
 
-(Contenido)
+## Descripción
+
+Permite al Usuario recuperar el acceso a su cuenta mediante el restablecimiento de su contraseña utilizando un token de verificación enviado a su correo electrónico.
+
+## Actor Principal
+
+Usuario
+
+## Precondiciones
+
+- El Usuario posee una cuenta registrada en el Sistema.
+- El Usuario tiene acceso al correo electrónico asociado a la cuenta.
+
+## Postcondiciones
+
+- La contraseña de la cuenta es actualizada exitosamente.
+- El Usuario puede iniciar sesión con la nueva contraseña.
+
+## Escenario Básico
+
+1. El caso de uso comienza cuando el Usuario intenta recuperar su contraseña.
+2. El Usuario proporciona el correo electrónico asociado a su cuenta.
+3. El Sistema valida que el correo electrónico exista.
+4. El Sistema ejecuta el caso de uso "Enviar token de restablecimiento".
+5. El Usuario ingresa el token recibido.
+6. El Sistema valida el token de recuperación.
+7. El Usuario proporciona la nueva contraseña.
+8. El Sistema valida la nueva contraseña.
+9. El Sistema actualiza la contraseña de la cuenta.
+10. El caso de uso termina cuando el Sistema muestra el mensaje "Contraseña restablecida exitosamente".
+
+## Escenarios Alternativos
+
+### A1. Correo electrónico no registrado
+
+1. El caso de uso comienza cuando el Usuario intenta recuperar su contraseña.
+2. El Usuario proporciona el correo electrónico asociado a su cuenta.
+3. El Sistema detecta que el correo electrónico no se encuentra registrado.
+4. El Sistema muestra el mensaje "No existe una cuenta asociada a este correo electrónico".
+5. El caso de uso finaliza sin iniciar el proceso de recuperación.
+
+### A2. Token inválido o expirado
+
+1. El caso de uso comienza cuando el Usuario intenta recuperar su contraseña.
+2. El Usuario proporciona el correo electrónico asociado a su cuenta.
+3. El Sistema valida que el correo electrónico exista.
+4. El Sistema ejecuta el caso de uso "Enviar token de restablecimiento".
+5. El Usuario ingresa el token recibido.
+6. El Sistema detecta que el token es inválido o ha expirado.
+7. El Sistema muestra el mensaje "Token inválido o expirado".
+8. El caso de uso finaliza sin restablecer la contraseña.
+
+### A3. Contraseña no válida
+
+1. El caso de uso comienza cuando el Usuario intenta recuperar su contraseña.
+2. El Usuario proporciona el correo electrónico asociado a su cuenta.
+3. El Sistema valida que el correo electrónico exista.
+4. El Sistema ejecuta el caso de uso "Enviar token de restablecimiento".
+5. El Usuario ingresa el token recibido.
+6. El Sistema valida el token de recuperación.
+7. El Usuario proporciona una nueva contraseña.
+8. El Sistema detecta que la contraseña no cumple con las políticas de seguridad establecidas.
+9. El Sistema muestra el mensaje "La contraseña no cumple con los requisitos de seguridad".
+10. El caso de uso finaliza sin actualizar la contraseña.
 
 ---
 
