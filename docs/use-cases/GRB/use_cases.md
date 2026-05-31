@@ -155,4 +155,44 @@ Usuario, Administrador
 
 # CU-09 Enviar Token de Restablecimiento
 
-(Contenido)
+## Descripción
+
+Permite al Sistema generar y enviar un código de seguridad para la recuperación de una cuenta.
+
+## Actor Principal
+
+Sistema
+
+## Precondiciones
+
+- Se ha solicitado la recuperación de contraseña de una cuenta existente.
+
+## Postcondiciones
+
+- El token de restablecimiento es enviado al correo del usuario.
+
+## Escenario Básico
+
+1. El caso de uso comienza cuando el Sistema aprueba la solicitud de recuperación de contraseña.
+2. El Sistema genera el token temporal de recuperación.
+3. El Sistema asocia el token generado a la cuenta correspondiente.
+4. El Sistema envía el mensaje con el token al correo electrónico registrado.
+5. El caso de uso termina cuando el Sistema muestra el mensaje "Token enviado exitosamente".
+
+## Escenarios Alternos
+
+### A1. Falla de conexión con el servidor
+
+1. El caso de uso comienza cuando el Sistema aprueba la solicitud de recuperación de contraseña.
+2. El Sistema genera el token temporal de recuperación.
+3. El Sistema asocia el token generado a la cuenta correspondiente.
+4. El Sistema detecta un error de conexión al intentar enviar el correo electrónico.
+5. El Sistema muestra el mensaje "Error al enviar el token, intente más tarde".
+6. El caso de uso finaliza sin enviar el token.
+
+### A2. Límite de intentos excedido
+
+1. El caso de uso comienza cuando el Sistema aprueba la solicitud de recuperación de contraseña.
+2. El Sistema detecta que se ha superado el límite de intentos permitidos para generar tokens.
+3. El Sistema muestra el mensaje "Límite de envíos excedido, espere un momento".
+4. El caso de uso finaliza sin enviar el token.
