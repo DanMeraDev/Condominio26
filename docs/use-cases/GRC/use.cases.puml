@@ -30,7 +30,7 @@ skinparam shadowing false
 
 actor Administrador as ADM
 actor Propietario   as PROP
-actor Usuario       as USR
+actor Presidente    as PRES
 
 rectangle "GRC – Módulo de Gestión de Inmuebles" {
   usecase "administrarInmuebles"                        as UC1
@@ -39,7 +39,7 @@ rectangle "GRC – Módulo de Gestión de Inmuebles" {
   usecase "mantenerCatalogoDelCondominio"             as UC4
   usecase "gestionarCaracteristicasDelCondominio"    as UC5
   usecase "gestionarPropiedades"                      as UC6
-  usecase "realizarReservaOAgenda"                    as UC7
+  usecase "gestionarCasosFortuitos"                    as UC7
   usecase "gestionarNotificacionesYRecordatorios"    as UC8
   usecase "actualizarEstadoDelInmueble"              as UC9
   usecase "generarReportesDeCambios"                 as UC10
@@ -53,7 +53,10 @@ ADM  --> UC9
 
 PROP --> UC6
 
-USR  --> UC7
+PRES  --> UC7
+PRES  --> UC1
+PRES  --> UC4
+PRES  --> UC9
 
 ' --- Relaciones include ---
 UC1 ..> UC2  : <<include>>

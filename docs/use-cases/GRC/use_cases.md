@@ -1,388 +1,280 @@
-# Documentación de Casos de Uso — Sistema de Gestión de Inmuebles
+# Módulo GRC - Gestión de Inmuebles
 
----
-
-<<<<<<< HEAD
 ## Índice
 
-- [Documentación de Casos de Uso — Sistema de Gestión de Inmuebles](#documentación-de-casos-de-uso--sistema-de-gestión-de-inmuebles)
-  - [Índice](#índice)
-  - [UC1: Administrar inmuebles](#uc1-administrar-inmuebles)
-  - [UC1: administrarInmuebles](#uc1-administrarinmuebles)
-  - [UC2: registrarEdificios](#uc2-registraredificios)
-  - [UC3: registrarDepartamentosSuitesEstudiosYLocales](#uc3-registrardepartamentossuitesestudiosylocales)
-  - [UC4: mantenerCatalogoDelCondominio](#uc4-mantenercatalogodelcondominio)
-  - [UC5: gestionarCaracteristicasDelCondominio](#uc5-gestionarcaracteristicasdelcondominio)
-  - [UC6: gestionarPropiedades](#uc6-gestionarpropiedades)
-  - [UC7: realizarReservaOAgenda](#uc7-realizarreservaoagenda)
-  - [UC8: gestionarNotificacionesYRecordatorios](#uc8-gestionarnotificacionesyrecordatorios)
-  - [UC9: actualizarEstadoDelInmueble](#uc9-actualizarestadodelinmueble)
-  - [UC10: generarReportesDeCambios](#uc10-generarreportesdecambios)
+1. [Gestionar Propiedades](#1-gestionar-propiedades)
+2. [Mantener Catálogo del Condominio](#2-mantener-catálogo-del-condominio)
+3. [Gestionar Características del Condominio](#3-gestionar-características-del-condominio)
+4. [Actualizar Estado del Inmueble](#4-actualizar-estado-del-inmueble)
+5. [Generar Reportes de Cambios](#5-generar-reportes-de-cambios)
+6. [Gestionar Casos Fortuitos](#6-gestionar-casos-fortuitos)
 
 ---
 
-## UC1: Administrar inmuebles
-=======
-## UC1: administrarInmuebles
->>>>>>> 6325e89850b89c4151cf69c559b795ea6fec870d
+# 1. Gestionar Propiedades
 
-**Descripción**
-Permite al Administrador gestionar los inmuebles registrados en el condominio, incluyendo edificios, departamentos, suites, estudios y locales comerciales.
+## Descripción
 
-**Actor Principal**
-Administrador
+El sistema permitirá consultar las propiedades que pertenecen a un propietario, verificar si se encuentran en alquiler o no y conocer los residentes asociados a cada inmueble.
 
-**Actores Secundarios**
-Ninguno
+## Datos del Caso de Uso
 
-**Precondiciones**
-- El administrador ha iniciado sesión.
-- El sistema se encuentra operativo.
+| Elemento | Descripción |
+|-----------|------------|
+| **Actor** | Administrador, Propietario |
+| **Entradas** | Número de cédula del propietario |
+| **Salidas** | Listado de propiedades y mensaje |
 
-**Postcondiciones**
-- La información del inmueble queda registrada o actualizada.
-- Los cambios quedan almacenados en la base de datos.
+## Escenario Básico
 
-**Flujo Principal**
-1. El Administrador selecciona la opción "administrarInmuebles".
-2. El sistema muestra el listado de inmuebles registrados.
-3. El Administrador selecciona una acción (crear, editar, consultar o eliminar).
-4. El sistema solicita los datos correspondientes.
-5. El Administrador ingresa o modifica la información.
-6. El sistema valida los datos.
-7. El sistema guarda los cambios.
-8. El sistema confirma la operación.
+1. El caso de uso inicia cuando el Administrador o Propietario selecciona la opción **Gestionar Propiedades**.
+2. El Sistema solicita el número de cédula del propietario.
+3. El actor ingresa el número de cédula.
+4. El Sistema valida el formato de la cédula.
+5. Si la cédula es válida, el Sistema busca la información del propietario.
+6. El Sistema recupera todas las propiedades asociadas al propietario.
+7. El Sistema consulta el estado de cada propiedad.
+8. El Sistema determina si la propiedad se encuentra en alquiler o no.
+9. El Sistema consulta los residentes asociados a cada propiedad.
+10. El Sistema muestra:
+    - Tipo de inmueble.
+    - Estado del inmueble.
+    - Situación de alquiler.
+    - Residentes registrados.
+11. El caso de uso termina mostrando la información y el mensaje:
 
-**Flujos Alternativos**
-- **A1. Datos inválidos:** El sistema detecta información incorrecta o incompleta → muestra mensaje de error → el Administrador corrige los datos.
-- **A2. Inmueble inexistente:** El Administrador intenta modificar un inmueble no registrado → el sistema informa que el inmueble no existe.
+> Consulta realizada correctamente.
 
-**Reglas de Negocio**
-- Cada inmueble debe tener un identificador único.
-- No se pueden registrar inmuebles duplicados.
-- Solo los administradores pueden eliminar inmuebles.
+## Escenarios Alternos
 
----
+### Escenario Alterno 1: Cédula inválida
 
-## UC2: registrarEdificios
+1. El Sistema valida la cédula.
+2. Si la cédula tiene formato incorrecto, el Sistema emite el mensaje:
 
-**Descripción**
-Permite al Administrador registrar nuevos edificios dentro del condominio como parte de la gestión de inmuebles.
+> Número de cédula inválido.
 
-**Actor Principal**
-Administrador
+3. El caso de uso termina.
 
-**Actores Secundarios**
-Ninguno
+### Escenario Alterno 2: Propietario no registrado
 
-**Precondiciones**
-- El Administrador ha iniciado sesión.
-- El Administrador está ejecutando el caso de uso "administrarInmuebles".
+1. El Sistema busca el propietario.
+2. Si el propietario no existe, el Sistema emite el mensaje:
 
-**Postcondiciones**
-- El edificio queda registrado en el catálogo del condominio.
+> Propietario no registrado.
 
-**Flujo Principal**
-1. El Administrador indica que desea registrar un edificio.
-2. El sistema solicita los datos del edificio (nombre, dirección, número de pisos, etc.).
-3. El Administrador ingresa la información.
-4. El sistema valida los datos.
-5. El sistema guarda el edificio.
-6. El sistema confirma el registro.
-
-**Flujos Alternativos**
-- **A1. Datos inválidos:** El sistema detecta error → muestra mensaje → el Administrador corrige.
-
-**Reglas de Negocio**
-- El nombre del edificio debe ser único dentro del condominio.
-- Cada edificio debe pertenecer a un condominio existente.
+3. El caso de uso termina.
 
 ---
 
-## UC3: registrarDepartamentosSuitesEstudiosYLocales
+# 2. Mantener Catálogo del Condominio
 
-**Descripción**
-Permite al Administrador registrar unidades específicas (departamentos, suites, estudios, locales) dentro de los edificios del condominio.
+## Descripción
 
-**Actor Principal**
-Administrador
+El sistema permitirá mantener actualizado el catálogo de inmuebles y parqueaderos disponibles para alquiler o venta dentro del condominio.
 
-**Actores Secundarios**
-Ninguno
+## Datos del Caso de Uso
 
-**Precondiciones**
-- El edificio padre ya está registrado.
-- El Administrador está ejecutando "administrarInmuebles".
+| Elemento | Descripción |
+|-----------|------------|
+| **Actor** | Administrador, Presidente |
+| **Entradas** | Tipo de inmueble, Estado del inmueble, Información del parqueadero |
+| **Salidas** | Catálogo actualizado, Mensaje |
 
-**Postcondiciones**
-- La unidad queda registrada y asociada a su edificio correspondiente.
+## Escenario Básico
 
-**Flujo Principal**
-1. El Administrador selecciona un edificio existente.
-2. El sistema solicita el tipo de unidad y sus datos.
-3. El Administrador ingresa la información.
-4. El sistema valida y guarda.
-5. El sistema confirma el registro.
+1. El actor selecciona la opción **Mantener Catálogo**.
+2. El Sistema muestra el catálogo actual.
+3. El actor registra, modifica o elimina información del catálogo.
+4. El Sistema valida la información ingresada.
+5. El Sistema actualiza el catálogo.
+6. El Sistema registra:
+   - Departamentos.
+   - Suites.
+   - Estudios.
+   - Locales comerciales.
+   - Parqueaderos.
+7. El Sistema actualiza la disponibilidad para alquiler o venta.
+8. El caso de uso termina con el mensaje:
 
-**Flujos Alternativos**
-- **A1. Edificio no existe:** El sistema informa y solicita registrar primero el edificio.
+> Catálogo actualizado correctamente.
 
-**Reglas de Negocio**
-- Cada unidad debe tener un número único dentro del edificio.
-- El tipo de unidad define ciertos atributos obligatorios.
+## Escenarios Alternos
 
----
+### Escenario Alterno 1: Información inválida
 
-## UC4: mantenerCatalogoDelCondominio
+1. El Sistema detecta información inválida.
+2. El Sistema emite el mensaje:
 
-**Descripción**
-Permite al Administrador mantener actualizado el catálogo general del condominio, incluyendo servicios, áreas comunes y reglamentos.
+> Información inválida para actualizar el catálogo.
 
-**Actor Principal**
-Administrador
-
-**Actores Secundarios**
-Ninguno
-
-**Precondiciones**
-- El Administrador ha iniciado sesión.
-
-**Postcondiciones**
-- El catálogo queda actualizado con la nueva información.
-
-**Flujo Principal**
-1. El Administrador accede a "mantenerCatalogoDelCondominio".
-2. El sistema muestra el catálogo actual.
-3. El Administrador agrega, edita o elimina elementos.
-4. El sistema valida y guarda.
-5. El sistema confirma la operación.
-
-**Flujos Alternativos**
-- **A1. Datos duplicados:** El sistema impide agregar elementos ya existentes.
-
-**Reglas de Negocio**
-- El catálogo es consultable por todos los actores, pero solo modificable por el Administrador.
+3. El caso de uso termina.
 
 ---
 
-## UC5: gestionarCaracteristicasDelCondominio
+# 3. Gestionar Características del Condominio
 
-**Descripción**
-Permite al Administrador definir y modificar las características generales del condominio (nombre, reglas, horarios, políticas, etc.).
+## Descripción
 
-**Actor Principal**
-Administrador
+El sistema permitirá administrar las características físicas de los inmuebles del condominio.
 
-**Actores Secundarios**
-Ninguno
+## Datos del Caso de Uso
 
-**Precondiciones**
-- El Administrador está en "mantenerCatalogoDelCondominio".
+| Elemento | Descripción |
+|-----------|------------|
+| **Actor** | Administrador, Presidente |
+| **Entradas** | Metros cuadrados, Número de habitaciones, Número de baños, Número de parqueaderos, Descripción adicional |
+| **Salidas** | Mensaje |
 
-**Postcondiciones**
-- Las características del condominio se actualizan.
+## Escenario Básico
 
-**Flujo Principal**
-1. El Administrador selecciona "gestionarCaracteristicasDelCondominio".
-2. El sistema muestra las características actuales.
-3. El Administrador modifica los valores.
-4. El sistema valida y guarda.
-5. El sistema confirma la actualización.
+1. El actor selecciona la opción **Gestionar Características**.
+2. El Sistema solicita la información del inmueble.
+3. El actor ingresa los datos.
+4. El Sistema valida los datos ingresados.
+5. El Sistema registra las características.
+6. El caso de uso termina con el mensaje:
 
-**Flujos Alternativos**
-- **A1. Formato inválido:** El sistema rechaza datos mal formateados.
+> Características registradas correctamente.
 
-**Reglas de Negocio**
-- Algunas características pueden tener efectos en otros módulos (ej: horarios de reserva).
+## Escenarios Alternos
 
----
+### Escenario Alterno 1: Datos inválidos
 
-## UC6: gestionarPropiedades
+1. Si los datos son inválidos, el Sistema emite el mensaje:
 
-**Descripción**
-Permite al Administrador y al Propietario gestionar la relación entre propietarios y las unidades que poseen dentro del condominio.
+> Información de características inválida.
 
-**Actor Principal**
-Administrador, Propietario
-
-**Actores Secundarios**
-Ninguno
-
-**Precondiciones**
-- La unidad inmueble ya existe.
-- El propietario está registrado en el sistema.
-
-**Postcondiciones**
-- La propiedad queda asignada o actualizada correctamente.
-
-**Flujo Principal**
-1. El actor selecciona "gestionarPropiedades".
-2. El sistema muestra las propiedades existentes.
-3. El actor asigna o modifica la relación propietario-unidad.
-4. El sistema valida que el propietario y la unidad existan.
-5. El sistema guarda los cambios.
-6. El sistema confirma la operación.
-
-**Flujos Alternativos**
-- **A1. Propietario o unidad no existe:** El sistema informa y no permite la asignación.
-
-**Reglas de Negocio**
-- Una unidad puede tener uno o más propietarios.
-- Un propietario puede tener múltiples unidades.
-- El Administrador puede gestionar todas las propiedades; el Propietario solo las suyas.
+2. El caso de uso termina.
 
 ---
 
-## UC7: realizarReservaOAgenda
+# 4. Actualizar Estado del Inmueble
 
-**Descripción**
-Permite al Administrador registrar, gestionar y dar seguimiento a eventos imprevistos que afectan a uno o varios inmuebles del condominio, tales como daños estructurales, inundaciones, incendios, cortes de servicios básicos o cualquier situación extraordinaria que requiera atención y control.
+## Descripción
 
-**Actor Principal**
-Administrador
+El sistema permitirá actualizar el estado de un inmueble y registrar los cambios relevantes producidos sobre este.
 
-**Actores Secundarios**
-Ninguno
+## Datos del Caso de Uso
 
-**Precondiciones**
-- El Usuario ha iniciado sesión.
-- Existe un inmueble o área común asociada al incidente.
+| Elemento | Descripción |
+|-----------|------------|
+| **Actor** | Administrador, Presidente |
+| **Entradas** | Código del inmueble, Nuevo estado, Información de residente, Información de remodelación |
+| **Salidas** | Mensaje, Registro histórico de cambios |
 
-**Postcondiciones**
-- El caso fortuito queda registrado en el sistema.
-- Se actualiza el estado del caso según las acciones realizadas.
-- Se generan las notificaciones correspondientes..
+## Escenario Básico
 
-**Flujo Principal**
-<<<<<<< HEAD
-1. El Administrador selecciona la opción "Administrar caso fortuito".
-2. El sistema muestra los casos registrados y la opción para crear uno nuevo.
-3. El Administrador registra la información del incidente.
-4. El sistema solicita detalles como fecha, ubicación, descripción y nivel de afectación.
-5. El Administrador ingresa la información requerida.
-6. El sistema valida los datos.
-7. El sistema registra el caso fortuito.
-8. El sistema ejecuta el caso de uso "Gestionar notificaciones y recordatorios".
-9. El sistema confirma el registro del incidente.
-=======
-1. El Usuario selecciona "realizarReservaOAgenda".
-2. El sistema muestra los recursos disponibles.
-3. El Usuario elige fecha, hora y recurso.
-4. El sistema verifica disponibilidad.
-5. El sistema confirma la reserva.
-6. El sistema envía notificación al Usuario.
->>>>>>> 6325e89850b89c4151cf69c559b795ea6fec870d
+1. El actor selecciona **Actualizar Estado del Inmueble**.
+2. El Sistema solicita el código del inmueble.
+3. El actor selecciona el inmueble.
+4. El Sistema muestra la información actual.
+5. El actor actualiza la información correspondiente.
 
-**Flujos Alternativos**
-- **A1. Datos incompletos:** El sistema detecta información obligatoria faltante y solicita su corrección.
-- **A2. Caso duplicado:** El sistema detecta que el incidente ya fue registrado y solicita verificar la información.
+Los cambios pueden incluir:
 
-**Reglas de Negocio**
-- Todo caso fortuito debe estar asociado a una ubicación específica.
-- Debe registrarse la fecha y hora de ocurrencia.
-- Solo los administradores pueden crear, modificar o cerrar casos fortuitos.
-- Todo caso fortuito debe mantener un historial de seguimiento.
-- 
+- Cambio de residente.
+- Remodelaciones realizadas.
+- Cambio de estado de ocupación.
+- Cambio de disponibilidad.
 
----
+6. El Sistema valida la información ingresada.
+7. El Sistema actualiza la información del inmueble.
+8. El Sistema registra automáticamente el cambio en el historial.
+9. El Sistema genera el registro correspondiente para futuros reportes.
+10. El caso de uso termina con el mensaje:
 
-## UC8: gestionarNotificacionesYRecordatorios
+> Estado actualizado correctamente.
 
-**Descripción**
-Permite generar y enviar notificaciones relacionadas con casos fortuitos registrados en el sistema, informando a los propietarios y responsables sobre incidentes, actualizaciones, acciones correctivas o resolución de eventos.
+## Escenarios Alternos
 
-**Actor Principal**
-Usuario
+### Escenario Alterno 1: Inmueble no encontrado
 
-**Actores Secundarios**
-Administrador, Propietario
+1. El inmueble no existe.
+2. El Sistema emite el mensaje:
 
-**Precondiciones**
-- Existe un caso fortuito registrado.
+> Inmueble no encontrado.
 
-**Postcondiciones**
-- Las notificaciones son enviadas a los destinatarios correspondientes.
+3. El caso de uso termina.
 
-**Flujo Principal**
-1. El sistema detecta la creación o actualización de un caso fortuito.
-2. El sistema identifica a los destinatarios afectados.
-3. El sistema genera la notificación correspondiente.
-4. El sistema envía la notificación mediante los canales configurados.
-5. El destinatario recibe el mensaje.
-6. El sistema registra el resultado del envío.
+### Escenario Alterno 2: Información inválida
 
-**Flujos Alternativos**
-- **A1. Fallo en envío:** El sistema registra el fallo y programa un nuevo intento.
+1. La información ingresada es inválida.
+2. El Sistema emite el mensaje:
 
-**Reglas de Negocio**
-- Toda actualización relevante de un caso fortuito debe generar una notificación.
-- Los propietarios solo reciben información relacionada con inmuebles bajo su responsabilidad o afectación.
+> Información inválida para actualizar el inmueble.
+
+3. El caso de uso termina.
 
 ---
 
-## UC9: actualizarEstadoDelInmueble
+# 5. Generar Reportes de Cambios
 
-**Descripción**
-Permite al Administrador actualizar el estado operativo de un inmueble (disponible, en mantenimiento, inhabilitado, etc.).
+## Descripción
 
-**Actor Principal**
-Administrador
+El sistema permitirá generar reportes históricos de modificaciones realizadas en los inmuebles.
 
-**Actores Secundarios**
-Ninguno
+## Datos del Caso de Uso
 
-**Precondiciones**
-- El inmueble existe en el sistema.
+| Elemento | Descripción |
+|-----------|------------|
+| **Actor** | Administrador, Presidente |
+| **Entradas** | Fecha inicial, Fecha final |
+| **Salidas** | Reporte, Mensaje |
 
-**Postcondiciones**
-- El estado del inmueble queda actualizado.
-- Se registra el cambio en el historial.
+## Escenario Básico
 
-**Flujo Principal**
-1. El Administrador selecciona "actualizarEstadoDelInmueble".
-2. El sistema muestra el listado de inmuebles.
-3. El Administrador selecciona uno y el nuevo estado.
-4. El sistema valida la transición de estado.
-5. El sistema guarda el cambio.
-6. El sistema confirma la operación.
+1. El actor ingresa la fecha inicial.
+2. El actor ingresa la fecha final.
+3. El Sistema valida el formato de las fechas.
+4. El Sistema consulta el historial de cambios.
+5. El Sistema obtiene:
+   - Cambios de residentes.
+   - Remodelaciones realizadas.
+   - Cambios de estado.
+   - Modificaciones de disponibilidad.
+6. El Sistema genera el reporte.
+7. El Sistema muestra el reporte.
+8. El caso de uso termina con el mensaje:
 
-**Flujos Alternativos**
-- **A1. Transición inválida:** El sistema rechaza el cambio (ej: inhabilitado a disponible sin inspección).
-
-**Reglas de Negocio**
-- Todo cambio de estado debe quedar registrado en el historial.
-- Ciertos estados bloquean reservas o asociación a propietarios.
+> Reporte generado correctamente.
 
 ---
 
-## UC10: generarReportesDeCambios
+# 6. Gestionar Casos Fortuitos
 
-**Descripción**
-Permite al Administrador generar reportes históricos de los cambios realizados sobre inmuebles, estados o asignaciones.
+## Descripción
 
-**Actor Principal**
-Administrador
+El sistema permitirá registrar eventos inesperados que afecten a los inmuebles o al condominio.
 
-**Actores Secundarios**
-Ninguno
+## Datos del Caso de Uso
 
-**Precondiciones**
-- Existe al menos un cambio registrado en el sistema.
+| Elemento | Descripción |
+|-----------|------------|
+| **Actor** | Presidente |
+| **Entradas** | Tipo de incidente, Descripción, Fecha, Inmueble afectado |
+| **Salidas** | Mensaje, Notificaciones |
 
-**Postcondiciones**
-- Se genera un reporte con los cambios solicitados.
+## Escenario Básico
 
-**Flujo Principal**
-1. El Administrador selecciona "generarReportesDeCambios".
-2. El sistema solicita filtros (fecha, tipo de cambio, inmueble).
-3. El Administrador ingresa los filtros.
-4. El sistema consulta el historial.
-5. El sistema genera el reporte (PDF, CSV, pantalla).
-6. El Administrador visualiza o descarga el reporte.
+1. El Presidente selecciona **Gestionar Casos Fortuitos**.
+2. El Sistema solicita la información del incidente.
+3. El Presidente registra el incidente.
+4. El Sistema valida la información.
+5. El Sistema registra el caso fortuito.
 
-**Flujos Alternativos**
-- **A1. Sin datos:** El sistema informa que no hay cambios para los filtros seleccionados.
+### Ejemplos de incidentes
 
-**Reglas de Negocio**
-- El historial de cambios es inmutable.
-- Solo el Administrador puede acceder a reportes de todos los inmuebles.
+- Incendio.
+- Inundación.
+- Cortes eléctricos.
+- Daños estructurales.
+- Fugas de agua.
+- Desastres naturales.
+
+6. El Sistema genera las notificaciones correspondientes.
+7. El caso de uso termina con el mensaje:
+
+> Caso fortuito registrado correctamente.
+
+---
