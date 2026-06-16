@@ -10,20 +10,22 @@
 - [registrarPagoEfectivoTransferenciaResidente](#requisito-registrarpagoefectivotransferenciaresidente)
 - [modificarFechaMaximaDePagoDeUnaDeuda](#requisito-modificarfechamaximadepagodeunadeuda)
 - [definirValorMensualDeAlicuotas](#requisito-definirvalormensualdealicuotas)
-- [generarReporteDePagosRealizados](#requisito-generareportedepagosrealizados)
+- [generarReporteDePagosRealizados](#requisito-generarreportedepagosrealizados)
 - [registrarEntidadBancaria](#requisito-registrarentidadbancaria)
 - [eliminarDeuda](#requisito-eliminarDeuda)
-- [generarReporteRendicionCuentas](#requisito-eliminarDeuda)
-- [registrarPagosCondominio](#requisito-eliminarDeuda)
-- [generarReporteGastos](#requisito-eliminarDeuda)
+- [registrarPagosCondominio](#requisito-registrarpagoscondominio)
+- [generarReporteGastos](#requisito-generarReportedeGastos)
+- [generarReporteRendicionCuentas](#requisito-generarReporteRendicionCuentas)
+
 
 
 ### Casos de uso Residente
-- [pagarDeuda](#requisito-registrarpago)
+- [pagarDeuda](#requisito-pagardeuda)
 - [registrarPagoMensualRecurrenteAlicuotas](#requisito-definirpagodealicuotasdeformamensual)
 - [solicitarPagoEnCuotas](#requisito-solicitarpagoencuotas)
 - [eliminarFormaDePagoRecurrente](#requisito-eliminarformadepagorecurrente)
 - [generarCertificadoDeNoDeudor](#requisito-generarcertificadodenodeudor)
+- [guardarDatosBancarios](#requisito-guardardatosbancarios)
 
 
 ### Casos de uso compartidos
@@ -38,8 +40,8 @@
 
 - [registrarDeudaAlicuotaMensual](#requisito-registrardeudamensual)
 - [enviarRecordatorioDeDeudaPendiente](#requisito-enviarrecordatoriodedeudapendiente)
-- [registrarMoraDeuda](#requisito-enviarrecordatoriodedeudapendiente)
-- [notificarReporteRendicionCuentas](#requisito-enviarrecordatoriodedeudapendiente)
+- [registrarMoraDeuda](#requisito-registrarmoradeuda)
+- [notificarReporteRendicionCuentas](#requisito-notificarreporterendicioncuentas)
 
 
 ---
@@ -129,7 +131,7 @@ El sistema permitirá registrar una deuda para un Residente
 1. El caso de uso inicia con el Presidente/Administrador ingresando el idDeuda.
 2. El Sistema verifica el idDeuda.
 3. SI existe una Deuda con el idDeuda ENTONCES el Sistema verifica el estado de la Deuda.
-4. SI el estado de la Deuda es ‘PENDIENTE’ ENTONCES el Presidente/Administrador cambia el estado de la Deuda a ‘PAGADA’.
+4. SI el estado de la Deuda es ‘EN PROCESO’ ENTONCES el Presidente/Administrador cambia el estado de la Deuda a ‘PAGADA’.
 5. El Sistema muestra el mensaje “Pago egistrado exitosamente”.
 6. El caso de uso finaliza con el cambio de estado de la Deuda a 'PAGADA'.
 
@@ -213,47 +215,19 @@ El sistema permitirá definir el valor mensual a obtener de las alicuotas
 
 ---
 
-# Requisito: consultarDeuda
-El sistema permitirá consultar las deudas pendientes de un residente mediante su número de cédula
-
-## Escenario Básico:**
-
-1. El caso de uso inicia con el Administrador/Residente ingresando el número de cédula de identidad.
-2. El Sistema verifica el número de cédula de identidad.
-3. SI el número de cédula de identidad es válido ENTONCES el Sistema busca deudas con estado pendiente asociadas al número de cédula ingresado.
-4. SI existen deudas con estado pendiente ENTONCES el Sistema genera un reporte con todos los detalles de las deudas encontradas.
-5. El caso de uso termina con el Sistema mostrando el reporte generado.
-
-## Escenario(s) alternativo(s):**
-
-### Escenario alternativo 1:**
-
-1. El caso de uso inicia con el Administrador/Residente ingresando el número de cédula de identidad.
-2. El Sistema verifica el número de cédula de identidad.
-3. SI el número de cédula de identidad NO es válido ENTONCES el caso de uso termina con el Sistema emitiendo el mensaje "El número de cédula ingresado no se encuentra registrado".
-
-### Escenario alternativo 2:**
-
-2. El Sistema verifica el número de cédula de identidad.
-3. SI el número de cédula de identidad es válido ENTONCES el Sistema busca deudas con estado pendiente asociadas al número de cédula ingresado.
-4. SI existen deudas con estado pendiente ENTONCES el caso de uso termina con el Sistema emitiendo el mensaje "Residente sin deudas pendientes".
-
----
-
 # Requisito: generarReporteDePagosRealizados
 
 El sistema permitirá generar un reporte financiero de los pagos realizados por los residentes
 
 ## Datos del Caso de Uso
 
-- **Actor:** Administrador
 - **Entradas:** fecha de inicio y fecha de fin
 - **Salidas:** reporte de pagos realizados y mensaje
 
 ## Escenario Básico
 
-1. El caso de uso inicia con el Administrador ingresando la fecha de inicio
-2. El Administrador ingresa la fecha de fin
+1. El caso de uso inicia con el Presidente/Administrador ingresando la fecha de inicio
+2. El Presidente/Administrador ingresa la fecha de fin
 3. El Sistema valida el formato de las fechas
 4. Si las fechas tienen un formato valido, entonces el sistema valida que las fechas sean mayores o iguales a la fecha actual
 5. Si las fechas son mayores o iguales a la fecha actual, entonces el sistema valida que la fecha de fin sea mayor o igual a la fecha de inicio
@@ -267,23 +241,23 @@ El sistema permitirá generar un reporte financiero de los pagos realizados por 
 
 ### Escenario Alterno 1
 
-1. El caso de uso inicia con el Administrador ingresando la fecha de inicio
-2. El Administrador ingresa la fecha de fin
+1. El caso de uso inicia con el Presidente/Administrador ingresando la fecha de inicio
+2. El Presidente/Administrador ingresa la fecha de fin
 3. El Sistema valida el formato de las fechas
 4. Si las fechas NO tienen un formato valido, entonces el caso de uso finaliza con el Sistema emitiendo el mensaje "Formato de fechas incorrecto, ingrese la fecha en formato DD/MM/YYYY"
 
 ### Escenario Alterno 2
 
-1. El caso de uso inicia con el Administrador ingresando la fecha de inicio
-2. El Administrador ingresa la fecha de fin
+1. El caso de uso inicia con el Presidente/Administrador ingresando la fecha de inicio
+2. El Presidente/Administrador ingresa la fecha de fin
 3. El Sistema valida el formato de las fechas
 4. Si las fechas tienen un formato valido, entonces el sistema valida que las fechas sean mayores o iguales a la fecha actual
 5. Si las fechas NO son mayores o iguales a la fecha actual, entonces el caso de uso finaliza con el Sistema emitiendo el mensaje "Las fechas deben ser mayores o iguales a la fecha actual"
 
 ### Escenario Alterno 3
 
-1. El caso de uso inicia con el Administrador ingresando la fecha de inicio
-2. El Administrador ingresa la fecha de fin
+1. El caso de uso inicia con el Presidente/Administrador ingresando la fecha de inicio
+2. El Presidente/Administrador ingresa la fecha de fin
 3. El Sistema valida el formato de las fechas
 4. Si las fechas tienen un formato valido, entonces el sistema valida que las fechas sean mayores o iguales a la fecha actual
 5. Si las fechas son mayores o iguales a la fecha actual, entonces el sistema valida que la fecha de fin sea mayor o igual a la fecha de inicio
@@ -291,13 +265,12 @@ El sistema permitirá generar un reporte financiero de los pagos realizados por 
 
 ---
 
-## Requisito: registrarEntidadBancaria
+# Requisito: registrarEntidadBancaria
 
-El sistema permitirá a un Administrador registrar una entidad bancaria.
+El sistema permitirá registrar una entidad bancaria.
 
 ## Datos del Caso de Uso
 
-- **Actor:** Administrador
 - **Entradas:** nombre de la entidad bancaria, número de cuenta, número de cédula de identidad del titular de la cuenta, tipo de cuenta, correo electrónico del titular la cuenta
 - **Salidas:** mensaje
 
@@ -340,17 +313,17 @@ El sistema permitirá a un Administrador registrar una entidad bancaria.
 
 ---
 
+
 # Requisito: eliminarDeuda
 
 ## Datos del Caso de Uso
 
-- **Actor:** Administrador
 - **Entradas:** identificador de la deuda
 - **Salidas:** mensaje de confirmacion
 
 ## Escenario Básico
 
-1. El caso de uso inicia con el Administrador ingresando el identificador de la deuda
+1. El caso de uso inicia con el Presidente/Administrador ingresando el identificador de la deuda
 2. El Sistema verifica que exista una deuda con el identificador proporcionado
 3. Si existe una deuda con el identificador proporcionado, entonces el Sistema cambia el estado de la deuda a "ELIMINADA"
 4. El caso de uso finaliza con el Sistema emitiendo el mensaje "Deuda Eliminada Exitosamente"
@@ -359,14 +332,409 @@ El sistema permitirá a un Administrador registrar una entidad bancaria.
 ## Escenarios Alternativos
 
 ### Escenario alternativo 1**
-1. El caso de uso inicia con el Administrador ingresando el identificador de la deuda
+1. El caso de uso inicia con el Presidente/Administrador ingresando el identificador de la deuda
 2. El Sistema verifica que exista una deuda con el identificador proporcionado
 3. Si NO existe una deuda con el identificador proporcionado, entonces el caso de uso finaliza con el Sistema emitiendo el mensaje " No existe una deuda con el identificador proporcionado.
 
 ---
 
+# Requisito: registrarPagosCondominio
+
+## Datos del Caso de Uso
+
+- **Entradas:** fecha de pago, valor pagado, motivo del pago , descripcion
+- **Salidas:** mensaje de confirmacion
+
+## Escenario Básico
+
+1. El caso de uso inicia con el Presidente/Administrador ingresando la fecha de cuando se realizó el pago
+2. El Presidente/Administrador ingresa el valor pagado
+3. El Presidente/Administrador ingresa el motivo del pago
+4. El Sistema valida que la fecha del pago sea menor o igual a la fecha actual, que el valor pagado sea un decimal con 2 decimales y que el motivo del pago sea SERVICIO BÁSICO, SUELDOS u OTROS.
+5. Si los datos tienen un formato válido, entonces el Presidente/Administrador ingresa la descripción del pago
+6. Si el motivo del pago es SERVICIO BÁSICO, el Sistema valida que la descripción sea AGUA, LUZ, TELEFONO o INTERNET
+7. Si el motivo del pago es SUELDOS u OTROS, el Sistema valida que la descripción tenga un formato válido
+8. Si el motivo del pago es correcto, entonces el Sistema emite el mensaje "Pago externo guardado exitosamente"
+9. El caso de uso finaliza con el Sistema guardando el pago.
 
 
+## Escenarios Alternativos
+
+### Escenario alternativo 1**
+1. El caso de uso inicia con el Presidente/Administrador ingresando la fecha de cuando se realizó el pago
+2. El Presidente/Administrador ingresa el valor pagado
+3. El Presidente/Administrador ingresa el motivo del pago
+4. El Sistema valida que la fecha del pago sea menor o igual a la fecha actual, que el valor pagado sea un decimal con 2 decimales y que el motivo del pago sea SERVICIO BÁSICO, SUELDOS u OTROS.
+5. Si los datos NO tienen un formato válido, entonces el caso de uso finaliza con el Sistema emitiendo el mensaje de error correspondiente y sin guardar el pago.
+
+### Escenario alternativo 2**
+1. El caso de uso inicia con el Presidente/Administrador ingresando la fecha de cuando se realizó el pago
+2. El Presidente/Administrador ingresa el valor pagado
+3. El Presidente/Administrador ingresa el motivo del pago
+4. El Sistema valida que la fecha del pago sea menor o igual a la fecha actual, que el valor pagado sea un decimal con 2 decimales y que el motivo del pago sea SERVICIO BÁSICO, SUELDOS u OTROS.
+5. Si los datos tienen un formato válido, entonces el Presidente/Administrador ingresa la descripción del pago
+6. Si el motivo del pago es SERVICIO BÁSICO, el Sistema valida que la descripción sea AGUA, LUZ, TELEFONO o INTERNET
+7. Si el motivo del pago es SUELDOS u OTROS, el Sistema valida que la descripción tenga un formato válido
+8. Si el motivo del pago NO es correcto, entonces el caso de uso finaliza con el Sistema emitiendo el mensaje de error correspondiente y sin guardar el pago.
+
+---
+
+
+# Requisito: generarReportedeGastos
+
+El sistema permitirá generar un reporte financiero de los gastos (pagos externos efectuados del condominio).
+
+## Datos del Caso de Uso
+
+- **Entradas:** fecha de inicio y fecha de fin
+- **Salidas:** reporte de gastos realizados y mensaje
+
+## Escenario Básico
+
+1. El caso de uso inicia con el Presidente/Administrador ingresando la fecha de inicio
+2. El Presidente/Administrador ingresa la fecha de fin
+3. El Sistema valida el formato de las fechas
+4. Si las fechas tienen un formato valido, entonces el sistema valida que las fechas sean mayores o iguales a la fecha actual
+5. Si las fechas son mayores o iguales a la fecha actual, entonces el sistema valida que la fecha de fin sea mayor o igual a la fecha de inicio
+6. Si la fecha de fin es mayor o igual a la fecha de inicio, entonces el Sistema consulta todos los pagos del condominio realizados durante ese periodo.
+7. El Sistema calcula el total de gastos por SERVICIOS BÁSICOS desglosado por total de AGUA, LUZ, TELEFONO, INTERNET, el total de gastos por SUELDOS y el total de gastor por motivos de OTROS.
+8. El Sistema genera el reporte donde cada registro contiene: , valor del pago, motivo , descripcion y muestra el total de valor de gastos calculados en el paso 7 del presente caso de uso.
+9. El caso de uso termina con el Sistema mostrando el reporte y emitiendo el mensaje "Reporte generado correctamente".
+
+
+## Escenarios Alternos
+
+### Escenario Alterno 1
+
+1. El caso de uso inicia con el Presidente/Administrador ingresando la fecha de inicio
+2. El Presidente/Administrado ingresa la fecha de fin
+3. El Sistema valida el formato de las fechas
+4. Si las fechas NO tienen un formato valido, entonces el caso de uso finaliza con el Sistema emitiendo el mensaje "Formato de fechas incorrecto, ingrese la fecha en formato DD/MM/YYYY"
+
+### Escenario Alterno 2
+
+1. El caso de uso inicia con el Presidente/Administrado ingresando la fecha de inicio
+2. El Presidente/Administrado ingresa la fecha de fin
+3. El Sistema valida el formato de las fechas
+4. Si las fechas tienen un formato valido, entonces el sistema valida que las fechas sean mayores o iguales a la fecha actual
+5. Si las fechas NO son mayores o iguales a la fecha actual, entonces el caso de uso finaliza con el Sistema emitiendo el mensaje "Las fechas deben ser mayores o iguales a la fecha actual"
+
+### Escenario Alterno 3
+
+1. El caso de uso inicia con el Presidente/Administrado ingresando la fecha de inicio
+2. El Presidente/Administrado ingresa la fecha de fin
+3. El Sistema valida el formato de las fechas
+4. Si las fechas tienen un formato valido, entonces el sistema valida que las fechas sean mayores o iguales a la fecha actual
+5. Si las fechas son mayores o iguales a la fecha actual, entonces el sistema valida que la fecha de fin sea mayor o igual a la fecha de inicio
+6. Si la fecha de fin NO es mayor o igual a la fecha de inicio, entonces el caso de uso termina con el Sistema emitiendo el mensaje "La fecha de fin debe ser mayor o igual a la fecha de inicio para la consulta"
+
+---
+
+
+# Requisito: generarReporteRendicionCuentas
+
+El sistema permitirá generar un reporte de rendición de cuentas disponible para cualquier residente del condominio.
+
+## Datos del Caso de Uso
+
+- **Entradas:** fecha de inicio, fecha de fin y observaciones
+- **Salidas:** reporte de rendición de cuentas y mensaje
+
+## Escenario Básico
+
+1. El caso de uso inicia con el Presidente/Administrador ingresando la fecha de inicio
+2. El Presidente/Administrador ingresa la fecha de fin
+3. El Sistema valida el formato de las fechas
+4. Si las fechas tienen un formato valido, entonces el sistema valida que las fechas sean mayores o iguales a la fecha actual
+5. Si las fechas son mayores o iguales a la fecha actual, entonces el sistema valida que la fecha de fin sea mayor o igual a la fecha de inicio
+6. Si la fecha de fin es mayor o igual a la fecha de inicio, entonces el Sistema verifica que no exista un reporte de rendición de cuentas generado entre el mismo periodo de tiempo.
+7. Si NO existe un reporte de rendición de cuentas generado entre el mismo periodo de tiempo, el Sistema  consulta todos los pagos del condominio realizados durante ese periodo y todos los pagos realizados por residentes durante ese periodo.
+8. El Sistema calcula el total de gastos por SERVICIOS BÁSICOS desglosado por total de AGUA, LUZ, TELEFONO, INTERNET, el total de gastos por SUELDOS y el total de gastor por motivos de OTROS.
+9. El Sistema calcula el total de ingresos por multas, alicuotas y reservas.
+10. El Sistema genera el reporte de rendición de cuentas donde se muestra: TOTAL DE GASTOS desglosado por el total por SERVICIO BÁSICO, SUELDOS Y OTROS, y el TOTAL DE INGRESOS desglosado por MULTAS, ALICUOTAS, RESERVAS, muestra el balance entre ingresos y gastos y la fecha de inicio y de fin al que hace referencia ese reporte.
+11. El Presidente/Administrador ingresa las observaciones del reporte de rendicion de cuentas
+12. El Sistema valida las observaciones del reporte de rendición de cuentas
+13. Si las observaciones tienen formato válido, entonces el caso de uso termina con el Sistema mostrando el reporte y emitiendo el mensaje "Reporte de Rendición de Cuentas generado exitosamente, disponible para la consulta de los residentes"
+14. El caso de uso termina con el Sistema mostrando el reporte y emitiendo el mensaje "Reporte generado correctamente".
+
+
+## Escenarios Alternos
+
+### Escenario Alterno 1
+
+1. El caso de uso inicia con el Presidente/Administrador ingresando la fecha de inicio
+2. El Presidente/Administrador ingresa la fecha de fin
+3. El Sistema valida el formato de las fechas
+4. Si las fechas tienen un formato valido, entonces el sistema valida que las fechas sean mayores o iguales a la fecha actual
+5. Si las fechas son mayores o iguales a la fecha actual, entonces el sistema valida que la fecha de fin sea mayor o igual a la fecha de inicio
+6. Si la fecha de fin es mayor o igual a la fecha de inicio, entonces el Sistema verifica que no exista un reporte de rendición de cuentas generado entre el mismo periodo de tiempo.
+7. Si existe un reporte de rendición de cuentas generado entre el mismo periodo de tiempo, el Sistema emite el mensaje "Ya se generó un reporte de rendición de cuentas para las fechas especificadas, puede consultarlo en cualquier momento".
+8. El caso de uso finaliza sin que el Sistema genere el reporte de rendición de cuentas.
+
+### Escenario Alterno 2
+
+1. El caso de uso inicia con el Presidente/Administrador ingresando la fecha de inicio
+2. El Presidente/Administrador ingresa la fecha de fin
+3. El Sistema valida el formato de las fechas
+4. Si las fechas tienen un formato valido, entonces el sistema valida que las fechas sean mayores o iguales a la fecha actual
+5. Si las fechas NO son mayores o iguales a la fecha actual, entonces el caso de uso finaliza con el Sistema emitiendo el mensaje "Las fechas deben ser mayores o iguales a la fecha actual"
+
+### Escenario Alterno 3
+
+1. El caso de uso inicia con el Presidente/Administrador ingresando la fecha de inicio
+2. El Presidente/Administrador ingresa la fecha de fin
+3. El Sistema valida el formato de las fechas
+4. Si las fechas tienen un formato valido, entonces el sistema valida que las fechas sean mayores o iguales a la fecha actual
+5. Si las fechas son mayores o iguales a la fecha actual, entonces el sistema valida que la fecha de fin sea mayor o igual a la fecha de inicio
+6. Si la fecha de fin NO es mayor o igual a la fecha de inicio, entonces el caso de uso termina con el Sistema emitiendo el mensaje "La fecha de fin debe ser mayor o igual a la fecha de inicio para la consulta"
+
+### Escenario Alterno 4
+
+1. El caso de uso inicia con el Presidente/Administrador ingresando la fecha de inicio
+2. El Presidente/Administrador ingresa la fecha de fin
+3. El Sistema valida el formato de las fechas
+4. Si las fechas NO tienen un formato valido, entonces el caso de uso finaliza con el Sistema emitiendo el mensaje "Formato de fechas incorrecto, ingrese la fecha en formato DD/MM/YYYY"
+
+---
+
+# Requisito: pagarDeuda
+El sistema permitirá registrar el pago de una deuda.
+
+## Datos del Caso de Uso
+
+- **Entradas:** id de la deuda, método de pago, datos de la tarjeta si el método de pago es tarjeta
+- **Salidas:** mensaje
+
+### Escenario Básico:**
+
+1. El caso de uso inicia con el Residente ingresando el id de la deuda a pagar
+2. El Sistema verifica que exista una deuda con el id ingresado
+3. Si la deuda existe, entonces el Sistema muestra el valor de la deuda a pagar y el estado de la deuda
+4. El Residente ingresa el método de pago
+5. Si el método de pago es EFECTIVO, entonces el Sistema cambia el estado de la deuda a "EN PROCESO"
+6. El caso de uso finaliza con el Sistema emitiendo el mensaje "Acerquese a oficinas de contabilidad para efectuar el pago"
+
+## Escenario(s) alternativo(s):**
+
+### Escenario alternativo 1:**
+
+1. El caso de uso inicia con el Residente ingresando el id de la deuda a pagar
+2. El Sistema verifica que exista una deuda con el id ingresado
+3. Si la deuda existe, entonces el Sistema muestra el valor de la deuda a pagar y el estado de la deuda
+4. El Residente ingresa el método de pago
+5. Si el método de pago es TRANSFERENCIA, entonces el Sistema cambia el estado de la deuda a "EN PRCCESO"
+6. El Sistema consulta los datos bancarios registrados por el Administrador
+7. Si existen datos bancarios, entonces el Sistema muestra los datos bancarios
+8. El Residente ingresa el comprobante de deposito
+9. El caso de uso finaliza con el Sistema "Se revisara el deposito y se actualizara el estado de su deuda en las próximas horas"
+
+### Escenario alternativo 2:**
+
+1. El caso de uso inicia con el Residente ingresando el id de la deuda a pagar
+2. El Sistema verifica que exista una deuda con el id ingresado
+3. Si la deuda existe, entonces el Sistema muestra el valor de la deuda a pagar y el estado de la deuda
+4. El Residente ingresa el método de pago
+5. Si el método de pago es TARJETA, entonces el Sistema muestra en pantalla el mensaje "Ingrese los datos de su tarjeta "
+6. El Residente ingresa los datos de su tarjeta
+7. La Plataforma externa procesa el pago y devuelve la aceptación o no
+8. Si el pago fue aceptado, entonces el Sistema cambia el estado de la deuda a "PAGADO"
+9. El caso de uso finaliza con el Sistema emitiendo el mensaje "Deuda cancelada exitosamente"
+
+---
+
+
+# Requisito: definirPagoDeAlicuotasDeFormaMensual
+El sistema permitirá definir el pago de  alícuotas de forma mensual (como pago recurrente).
+
+## Datos del Caso de Uso
+
+- **Entradas:** valor a definir como pago recurrente
+- **Salidas:** mensaje
+
+### Escenario Básico:**
+
+1. El caso de uso inicia con el Residente ingresando el valor de pago que desea pagar de forma recurrente.
+2. El Sistema consulta el valor de alicuotas mensual y calcula la alicuota respectiva para el residente
+3. El Sistema verifica si el valor ingresado por el usuario es igual al valor que le corresponde cancelar por concepto de alícuota.
+4. SI el valor ingresado es válido entonces el Sistema consulta los datos financieros del Residente
+5. Si el Residente cuenta con datos financieros, entonces el Sistema guarda el pago recurrente y debitará mes a mes de la tarjeta o de la cuenta registrada.
+6. El caso de uso finaliza con el Sistema emitiendo el mensaje "Pago recurrente guardado exitosamente"
+
+## Escenario(s) alternativo(s):**
+
+### Escenario alternativo 1:**
+
+1. El caso de uso inicia con el Residente ingresando el valor de pago que desea pagar de forma recurrente.
+2. El Sistema consulta el valor de alicuotas mensual y calcula la alicuota respectiva para el residente
+3. El Sistema verifica si el valor ingresado por el usuario es igual al valor que le corresponde cancelar por concepto de alícuota.
+4. SI el valor ingresado NO válido entonces el Sistema emite el mensaje "Su valor de alicuota no corresponde al valor que desea pagar mensualmente, el valor que le corresponde es: valor"
+5. El caso de uso finaliza sin que se guarde un pago recurrente.
+
+### Escenario alternativo 2:**
+
+1. El caso de uso inicia con el Residente ingresando el valor de pago que desea pagar de forma recurrente.
+2. El Sistema consulta el valor de alicuotas mensual y calcula la alicuota respectiva para el residente
+3. El Sistema verifica si el valor ingresado por el usuario es igual al valor que le corresponde cancelar por concepto de alícuota.
+4. SI el valor ingresado es válido entonces el Sistema consulta los datos financieros del Residente
+5. Si el Residente NO cuenta con datos financieros, entonces el Sistema emite el mensaje "Debe registrar una tarjeta de debito / credito para configurar el pago recurrente"
+6. El caso de uso finaliza sin que se guarde el pago recurrente.
+
+---
+
+# Requisito: solicitarPagoEnCuotas
+El Sistema permitirá a un residente solicitar el pago en cuotas.
+
+## Datos del Caso de Uso
+
+- **Entradas:** idDeuda a diferir, número de meses a diferir
+- **Salidas:** mensaje
+
+## Escenario Básico:
+
+1. El caso de uso inicia con el Residente ingresando el idDeuda que desea diferir
+2. El Residente ingresa el numero de meses a los cuales desea diferir la deuda
+3. El Sistema valida el formato del número de meses a los cuales desea difierir la deuda
+4. Si el número de meses es mayor a 2 entonces el Sistema consulta las deudas pendientes del residente
+5. Si el Residente NO tiene deudas pendientes, entonces el Sistema calcula el valor a pagar por cada cuota según el valor de la deuda y el número de meses a diferir
+6. El sistema genera tantas deudas como número de meses a diferir con fechas máximas de pago saltadas de un mes en un mes y el valor calculado
+7. El Sistema emite el mensaje "Deuda diferida exitosamente"
+8. El caso de uso finaliza con el Sistema mostrando las deudas que hacen referencia a las cuotas. 
+
+
+## Escenario(s) alternativo(s):**
+
+### Escenario alternativo 1**
+1. El caso de uso inicia con el Residente ingresando el idDeuda que desea diferir
+2. El Residente ingresa el numero de meses a los cuales desea diferir la deuda
+3. El Sistema valida el formato del número de meses a los cuales desea difierir la deuda
+4. Si el número de NO meses es mayor a 2 entonces el caso de uso finaliza con el Sistema emitiendo el mensaje "El numero de meses a diferir la deuda debe ser de almenos 3" y sin diferir la deuda
+
+### Escenario alternativo 2**
+1. El caso de uso inicia con el Residente ingresando el idDeuda que desea diferir
+2. El Residente ingresa el numero de meses a los cuales desea diferir la deuda
+3. El Sistema valida el formato del número de meses a los cuales desea difierir la deuda
+4. Si el número de meses es mayor a 2 entonces el Sistema consulta las deudas pendientes del residente
+5. Si el Residente SI tiene deudas pendientes, entonces el Sistema emite el mensaje "Tiene deudas pendientes de pago, no puede ser beneficiario para diferir una deuda hasta que pague todos sus valores"
+6. El caso de uso finaliza con el Sistema sin diferir la deuda
+
+---
+# Requisito: eliminarFormaDePagoRecurrente
+El sistema permitira eliminar la forma de pago recurrente.
+
+## Datos del Caso de Uso
+
+- **Entradas:** id del pago recurrente a cancelar
+- **Salidas:** mensaje
+
+## Escenario Básico:**
+
+1. El caso de uso inicia con el Administrador/Residente ingresando el id del pago recurrente a cancelar
+2. El Sistema verifica que exista un pago recurrente con el id proporcionado asociado al Residente/Administrador ejecutando el caso de uso
+3. Si existe un pago recurrente, entonces el Sistema elimina el pago recurrente
+4. El caso de uso finaliza con el Sistema emitiendo el mensaje "Pago de alicuota eliminado exitosamente"
+
+
+## Escenario(s) alternativo(s):**
+
+### Escenario alternativo 1**
+
+1. El caso de uso inicia con el Administrador/Residente ingresando el id del pago recurrente a cancelar
+2. El Sistema verifica que exista un pago recurrente con el id proporcionado asociado al Residente/Administrador ejecutando el caso de uso
+3. Si NO existe un pago recurrente, entonces el Sistema emite el mensaje "No existe una forma de pago recurrente para el usuario asociado"
+4. El caso de uso finaliza sin que el Sistema elimine la forma de pago recurrente
+
+
+---
+
+# Requisito: generarCertificadoDeNoDeudor
+El sistema permitirá generar un certificado de no deudor.
+
+## Datos del Caso de Uso
+
+- **Entradas:** número de cédula de identidad del Residente
+- **Salidas:** mensaje y cerficado de no deudor
+
+## Escenario Básico:**
+
+1. El caso de uso inicia con el Administrador/Residente ingresando el número de cédula de identidad del Residente
+2. El Sistema verifica que exista un Residente con el número de cédula de identidad
+3. Si el Residente existe, entonces el Sistema consulta si existen deudas en estado "PENDIENTE", "EN PROCESO", o "MORA" asociadas al Residente
+4. Si NO existen deudas, entonces el Sistema genera el cerficado con el formato específico.
+5. El Sistema emite el mensaje "Certificado generado exitosamente"
+6. El caso de uso finaliza con el Sistema descargando el certificado de no deudor.
+
+## Escenario(s) alternativo(s):**
+
+### Escenario alternativo 1**
+
+1. El caso de uso inicia con el Administrador/Residente ingresando el número de cédula de identidad del Residente
+2. El Sistema verifica que exista un Residente con el número de cédula de identidad
+3. Si el Residente NO existe, entonces el Sistema emite el mensaje "No existe un residente con la cédula de identidad proporcionada"
+
+### Escenario alternativo 2**
+
+1. El caso de uso inicia con el Administrador/Residente ingresando el número de cédula de identidad del Residente
+2. El Sistema verifica que exista un Residente con el número de cédula de identidad
+3. Si el Residente existe, entonces el Sistema consulta si existen deudas en estado "PENDIENTE", "EN PROCESO", o "MORA" asociadas al Residente
+4. Si  existen deudas, entonces el Sistema emite el mensaje "Tiene deudas pendientes por pagar, no se puede generar el certificado
+5. El caso de uso finaliza sin que el Sistema genere el certificado de no deudor.
+---
+
+# Requisito: registrarDatosBancarios
+El sistema permitirá guardar los datos bancarios de un residente para los pagos recurrentes
+
+## Datos del Caso de Uso
+
+- **Entradas:** número de cédula de identidad del Residente
+- **Salidas:** mensaje y cerficado de no deudor
+
+## Escenario Básico:**
+
+
+## Escenario(s) alternativo(s):**
+
+### Escenario alternativo 1:**
+
+
+### Escenario alternativo 2:**
+
+
+---
+
+# Requisito: consultarDeuda
+El sistema permitirá consultar las deudas de un residente mediante su número de cédula
+
+## Datos del Caso de Uso
+
+- **Entradas:** número de cédula de identidad del Residente
+- **Salidas:** deudas pendientes del residnete
+
+## Escenario Básico:**
+
+1. El caso de uso inicia con el Administrador/Residente ingresando el número de cédula de identidad.
+2. El Sistema verifica el número de cédula de identidad.
+3. SI existe un Residente con el número de cédula de identidad proporcionado, entonces el Sistema consulta todas las deudas en estado "PENDIENTE", "EN PROCESO" y "MORA" asociadas al Residente.
+4. Si existen deudas en estado "PENDIENTE", "EN PROCESO", "MORA" entonces el Sistema emite el mensaje "Deudas del Residente"
+5. El caso de uso finaliza con el Sistema mostrando las deudas consultadas.
+
+
+## Escenario(s) alternativo(s):**
+
+### Escenario alternativo 1:**
+
+1. El caso de uso inicia con el Administrador/Residente ingresando el número de cédula de identidad.
+2. El Sistema verifica el número de cédula de identidad.
+3. SI existe un Residente con el número de cédula de identidad proporcionado, entonces el Sistema consulta todas las deudas en estado "PENDIENTE", "EN PROCESO" y "MORA" asociadas al Residente.
+4. Si NO existen deudas en estado "PENDIENTE", "EN PROCESO", "MORA" entonces el Sistema emite el mensaje "El Residente no tiene deudas"
+5. El caso de uso finaliza sin que el Sistema muestra algo.
+
+### Escenario alternativo 2:**
+
+1. El caso de uso inicia con el Administrador/Residente ingresando el número de cédula de identidad.
+2. El Sistema verifica el número de cédula de identidad.
+3. SI NO existe un Residente con el número de cédula de identidad proporcionado, entonces el caso de uso finaliza con el Sistema emitiendo el mensaje "No existe un cliente con el número de cédula proporcionado".
+
+---
 
 
 # Requisito: consultarPagosEfectuados
@@ -375,7 +743,6 @@ El sistema permitirá consultar los pagos efectuados durante una fecha de inicio
 
 ## Datos del Caso de Uso
 
-- **Actores:** Administrador y Residente
 - **Entradas:** fecha de inicio y fecha de fin
 - **Salidas:** pagos efectuados y mensaje
 
@@ -416,267 +783,100 @@ El sistema permitirá consultar los pagos efectuados durante una fecha de inicio
 
 --- 
 
-# Requisito: solicitarPagoEnCuotas
-El Sistema permitirá a un residente solicitar el pago en cuotas.
-
-## Escenario Básico:
-
-1. El caso de uso inicia con el Residente ingresando el idDeuda que desea diferir
-2. El Residente ingresa el numero de meses a los cuales desea diferir la deuda
-3. El Sistema valida el formato del número de meses a los cuales desea difierir la deuda
-4. Si el número de meses es mayor a 2 entonces el Sistema consulta las deudas pendientes del residente
-5. Si el Residente NO tiene deudas pendientes, entonces el Sistema calcula el valor a pagar por cada cuota según el valor de la deuda y el número de meses a diferir
-6. El sistema genera tantas deudas como número de meses a diferir con fechas máximas de pago saltadas de un mes en un mes y el valor calculado
-7. El Sistema emite el mensaje "Deuda diferida exitosamente"
-8. El caso de uso finaliza con el Sistema mostrando las deudas que hacen referencia a las cuotas. 
-
-
-## Escenario(s) alternativo(s):**
-
-### Escenario alternativo 1**
-1. El caso de uso inicia con el Residente ingresando el idDeuda que desea diferir
-2. El Residente ingresa el numero de meses a los cuales desea diferir la deuda
-3. El Sistema valida el formato del número de meses a los cuales desea difierir la deuda
-4. Si el número de NO meses es mayor a 2 entonces el caso de uso finaliza con el Sistema emitiendo el mensaje "El numero de meses a diferir la deuda debe ser de almenos 3" y sin diferir la deuda
-
-### Escenario alternativo 2**
-1. El caso de uso inicia con el Residente ingresando el idDeuda que desea diferir
-2. El Residente ingresa el numero de meses a los cuales desea diferir la deuda
-3. El Sistema valida el formato del número de meses a los cuales desea difierir la deuda
-4. Si el número de meses es mayor a 2 entonces el Sistema consulta las deudas pendientes del residente
-5. Si el Residente SI tiene deudas pendientes, entonces el Sistema emite el mensaje "Tiene deudas pendientes de pago, no puede ser beneficiario para diferir una deuda hasta que pague todos sus valores"
-6. El caso de uso finaliza con el Sistema sin diferir la deuda
-
----
-# Requisito: definirPagoDeAlicuotasDeFormaMensual
-El sistema permitirá definir el pago de  alícuotas de forma mensual (como pago recurrente).
-
-### Escenario Básico:**
-
-1. El caso de uso inicia con el Residente ingresando el valor de pago que desea pagar de forma recurrente.
-2. El Sistema consulta el valor de alicuotas mensual y calcula la alicuota respectiva para el residente
-3. El Sistema verifica si el valor ingresado por el usuario es igual al valor que le corresponde cancelar por concepto de alícuota.
-4. SI el valor ingresado es válido entonces el Sistema consulta los datos financieros del Residente
-5. Si el Residente cuenta con datos financieros, entonces el Sistema guarda el pago recurrente y debitará mes a mes de la tarjeta o de la cuenta registrada.
-6. El caso de uso finaliza con el Sistema emitiendo el mensaje "Pago recurrente guardado exitosamente"
-
-## Escenario(s) alternativo(s):**
-
-### Escenario alternativo 1:**
-
-1. El caso de uso inicia con el Residente ingresando el valor de pago que desea pagar de forma recurrente.
-2. El Sistema consulta el valor de alicuotas mensual y calcula la alicuota respectiva para el residente
-3. El Sistema verifica si el valor ingresado por el usuario es igual al valor que le corresponde cancelar por concepto de alícuota.
-4. SI el valor ingresado NO válido entonces el Sistema emite el mensaje "Su valor de alicuota no corresponde al valor que desea pagar mensualmente, el valor que le corresponde es: valor"
-5. El caso de uso finaliza sin que se guarde un pago recurrente.
-
-### Escenario alternativo 2:**
-
-1. El caso de uso inicia con el Residente ingresando el valor de pago que desea pagar de forma recurrente.
-2. El Sistema consulta el valor de alicuotas mensual y calcula la alicuota respectiva para el residente
-3. El Sistema verifica si el valor ingresado por el usuario es igual al valor que le corresponde cancelar por concepto de alícuota.
-4. SI el valor ingresado es válido entonces el Sistema consulta los datos financieros del Residente
-5. Si el Residente NO cuenta con datos financieros, entonces el Sistema emite el mensaje "Debe registrar una tarjeta de debito / credito para configurar el pago recurrente"
-6. El caso de uso finaliza sin que se guarde el pago recurrente.
-
----
-# Requisito: eliminarFormaDePagoRecurrente
-El sistema permitira eliminar la forma de pago recurrente.
-
-## Escenario Básico:**
-
-1. El usuario (Residente) se encuentra autenticado en el sistema. 
-2. El usuario tiene al menos una forma de pago configurada en estado "RECURRENTE" o "ACTIVA" (débito automático para alícuotas o mensualidades).
-3. El residente ingresa al módulo de "Métodos de Pago".
-4. El Sistema consulta y despliega la lista de tarjetas o cuentas asociadas, identificando claramente cuál de ellas está marcada como "Pago Recurrente / Débito Automático".
-5. El Residente selecciona el método de pago recurrente y hace clic en el botón "Eliminar Forma de Pago Recurrente" (o "Desvincular Débito Automático").
-6. El Sistema despliega un mensaje emergente de confirmación advirtiendo sobre las implicaciones (ej. «Si elimina este método, sus próximas facturas deberán ser canceladas de forma manual antes de la fecha de vencimiento»). El mensaje incluye dos botones: "Confirmar" y "Cancelar".
-7. El Residente hace clic en "Confirmar".
-8. El Sistema se comunica de forma segura mediante API con la pasarela de pagos para dar de baja el token de recurrencia.
-9. La pasarela responde con éxito. El sistema actualiza el estado de la forma de pago en la base de datos interna (la elimina o cambia su estado a "INDIVIDUAL / MANUAL").
-10. El Sistema muestra un mensaje de éxito en pantalla: «La recurrencia de pago ha sido eliminada exitosamente».
-11. El Sistema envía una notificación automática (correo electrónico) al Residente, confirmando la cancelación del débito automático.
-12. Los futuros cargos del residente ya no se debitarán automáticamente y pasarán al flujo de facturación manual en estado "PENDIENTE".
-
-## Escenario(s) alternativo(s):**
-
-### Escenario alternativo 1**
-
-1. El usuario (Residente) se encuentra autenticado en el sistema.
-2. El usuario tiene al menos una forma de pago configurada en estado "RECURRENTE" o "ACTIVA" (débito automático para alícuotas o mensualidades).
-3. El Residente ingresa al módulo de "Métodos de Pago".
-4. El Sistema consulta y despliega la lista de tarjetas o cuentas asociadas, identificando claramente cuál de ellas está marcada como "Pago Recurrente / Débito Automático".
-5. El Residente selecciona el método de pago recurrente y hace clic en el botón "Eliminar Forma de Pago Recurrente" (o "Desvincular Débito Automático").
-6. El Sistema despliega un mensaje emergente de confirmación advirtiendo sobre las implicaciones (ej. «Si elimina este método, sus próximas facturas deberán ser canceladas de forma manual antes de la fecha de vencimiento»). El mensaje incluye dos botones: "Confirmar" y "Cancelar".
-7. El Residente hace clic en el botón "Cancelar" en el mensaje emergente.
-8. El Sistema cierra la ventana de confirmación, no realiza modificaciones en la base de datos ni en la pasarela de pagos, y mantiene al usuario en la interfaz de "Métodos de Pago" con la recurrencia intacta.
-
-### Escenario alternativo 2**
-
-1. El usuario (Residente) se encuentra autenticado en el sistema.
-2. El usuario tiene al menos una forma de pago configurada en estado "RECURRENTE" o "ACTIVA" (débito automático para alícuotas o mensualidades).
-3. El Residente ingresa al módulo de "Métodos de Pago".
-4. El Sistema consulta y despliega la lista de tarjetas o cuentas asociadas, identificando claramente cuál de ellas está marcada como "Pago Recurrente / Débito Automático".
-5. El Residente selecciona el método de pago recurrente y hace clic en el botón "Eliminar Forma de Pago Recurrente" (o "Desvincular Débito Automático").
-6. El Sistema despliega un mensaje emergente de confirmación advirtiendo sobre las implicaciones (ej. «Si elimina este método, sus próximas facturas deberán ser canceladas de forma manual antes de la fecha de vencimiento»). El mensaje incluye dos botones: "Confirmar" y "Cancelar".
-7. El Residente hace clic en "Confirmar".
-8. El Sistema se comunica de forma segura mediante API con la pasarela de pagos para dar de baja el token de recurrencia.
-9. El Sistema espera la respuesta de la pasarela durante un tiempo límite (Timeout). Al no recibir respuesta o recibir un código de error de red (ej. HTTP 503), el sistema revierte los cambios locales en memoria.
-10. El Sistema despliega una notificación de error técnico en la interfaz: «Temporalmente no podemos procesar su solicitud. Su método de pago recurrente sigue activo. Por favor, intente más tarde o contacte al administrador».
-11. El Sistema registra el incidente en el log de errores interno para auditoría técnica.
-
----
-
-# Requisito: generarCertificadoDeNoDeudor
-El sistema permitirá generar un certificado de no deudor.
-Este escenario describe el camino ideal en el que un residente solvente solicita su certificado y el sistema lo genera de manera automática y exitosa.
-
-## Escenario Básico:**
-
-1. El usuario (Residente o Administrador) se encuentra autenticado en el sistema.
-2. El Residente cuenta con un expediente registrado (ID de residente y departamento asignado).
-3. El usuario ingresa al módulo de "Certificados" o "Estado de Cuenta".
-4. El usuario hace clic en el botón "Generar Certificado de No Deudor".
-5. El Sistema identifica el ID del residente e inicia una consulta en tiempo real en la base de datos de obligaciones financieras asociadas a dicho usuario.
-6. El Sistema verifica que el residente no tenga ninguna obligación en estado "PENDIENTE" o "EN MORA".
-7. El Sistema compila la información requerida para el documento: Nombre completo del residente (validando la cadena de texto), Cédula de identidad, ID de departamento, fecha y hora de emisión.
-8. El Sistema genera un archivo digital en formato PDF no editable con el Certificado de No Deudor / Solvencia.
-9. El Sistema registra en la bitácora de auditoría que se emitió un certificado de solvencia para el residente con su respectiva fecha y hora.
-10. El Sistema despliega el documento en pantalla y habilita de forma automática las opciones de "Descargar" e "Imprimir".
-11. El Sistema registra la acción en un historial de logs.
-
-
-## Escenario(s) alternativo(s):**
-
-### Escenario alternativo 1**
-
-1. El usuario (Residente o Administrador) se encuentra autenticado en el sistema.
-2. El Residente cuenta con un expediente registrado (ID de residente y departamento asignado).
-3. El usuario ingresa al módulo de "Certificados" o "Estado de Cuenta".
-4. El usuario hace clic en el botón "Generar Certificado de No Deudor".
-5. El Sistema identifica el ID del residente e inicia una consulta en tiempo real en la base de datos de obligaciones financieras asociadas a dicho usuario.
-6. El Sistema verifica que el residente no tenga ninguna obligación en estado "PENDIENTE" o "EN MORA", pero detecta que tiene un plan de pagos diferido vigente (cuotas futuras que aún no se han vencido).
-7. Sistema: Evalúa si el plan de pagos se encuentra al día.
-8. Si las cuotas facturadas hasta la fecha están pagadas, pero quedan cuotas futuras por vencer, el sistema detiene la emisión regular y muestra una advertencia: «Usted posee un plan de pagos activo. Para emitir un certificado de liberación total, debe liquidar las cuotas diferidas anticipadamente. ¿Desea generar un certificado parcial con observaciones?».
-9. El usuario selecciona el botón "Aceptar".
-10. El Sistema genera el certificado en PDF añadiendo una cláusula de observación obligatoria que indica: "El residente se encuentra al día, manteniendo un convenio de pago activo en cuotas pendientes".
-11. El Sistema compila la información requerida para el documento: Nombre completo del residente (validando la cadena de texto), Cédula de identidad, ID de departamento, fecha y hora de emisión.
-12. El Sistema genera un archivo digital en formato PDF no editable con el Certificado de No Deudor / Solvencia.
-13. El Sistema registra en la bitácora de auditoría que se emitió un certificado de solvencia para el residente con su respectiva fecha y hora.
-14. El Sistema despliega el documento en pantalla y habilita de forma automática las opciones de "Descargar" e "Imprimir".
-15. El Sistema registra la acción en un historial de logs.
-
-
-
----
-# Requisito: registrarPago
-El sistema permitirá registrar el pago de una deuda.
-
-### Escenario Básico:**
-
-1. El caso de uso inicia con el Residente ingresando el id de la deuda a pagar
-2. El Sistema verifica que exista una deuda con el id ingresado
-3. Si la deuda existe, entonces el Sistema muestra el valor de la deuda a pagar y el estado de la deuda
-4. El Residente ingresa el método de pago
-5. Si el método de pago es EFECTIVO, entonces el Sistema cambia el valor de la deuda a "PENDIENTE"
-6. El caso de uso finaliza con el Sistema emitiendo el mensaje "Acerquese a oficinas de contabilidad para efectuar el pago"
-
-## Escenario(s) alternativo(s):**
-
-### Escenario alternativo 1:**
-
-1. El caso de uso inicia con el Residente ingresando el id de la deuda a pagar
-2. El Sistema verifica que exista una deuda con el id ingresado
-3. Si la deuda existe, entonces el Sistema muestra el valor de la deuda a pagar y el estado de la deuda
-4. El Residente ingresa el método de pago
-5. Si el método de pago es TRANSFERENCIA, entonces el Sistema cambia el valor de la deuda a "PENDIENTE"
-6. El Sistema consulta los datos bancarios registrados por el Administrador
-7. Si existen datos bancarios, entonces el Sistema muestra los datos bancarios
-8. El Residente ingresa el comprobante de deposito
-9. El caso de uso finaliza con el Sistema "Se revisara el deposito y se actualizara el estado de su deuda en las próximas horas"
-
-### Escenario alternativo 2:**
-
-1. El caso de uso inicia con el Residente ingresando el id de la deuda a pagar
-2. El Sistema verifica que exista una deuda con el id ingresado
-3. Si la deuda existe, entonces el Sistema muestra el valor de la deuda a pagar y el estado de la deuda
-4. El Residente ingresa el método de pago
-5. Si el método de pago es TARJETA, entonces el Sistema muestra en pantalla el mensaje "Ingrese los datos de su tarjeta "
-6. El Residente ingresa los datos de su tarjeta
-7. La Plataforma externa procesa el pago y devuelve la aceptación o no
-8. Si el pago fue aceptado, entonces el Sistema cambia el estado de la deuda a "PAGADO"
-9. El caso de uso finaliza con el Sistema emitiendo el mensaje "Deuda cancelada exitosamente"
-
----
 
 # Requisito: registrarDeudaMensual
 
-El sistema registra el valor de alicuotas de cada cliente de forma mensual
+El sistema registrará el valor de alicuotas de cada Residente de forma mensual
 
 ## Datos del Caso de Uso
 
-- **Actor:** Sistema Automático
-- **Entradas:** id del Residente
-- **Salidas:** email al Cliente notificando sobre la deuda
+- **Entradas:** número de cédula de identidad del Residente del departamento
+- **Salidas:** notificación al Residente sobre la deuda
 
 ## Escenario Básico
 
-1. El caso de uso inicia cuando el Sistema identifica una obligación de pago en estado "PENDIENTE" o "EN MORA".
-2. El Sistema verifica que la obligación de pago esté asociada a un residente.
-3. SI la obligación de pago está asociada a un residente ENTONCES el Sistema verifica que el residente tenga un correo electrónico registrado.
-4. SI el residente tiene un correo electrónico registrado ENTONCES el Sistema genera un recordatorio con el nombre completo del residente, el identificador del departamento y el saldo pendiente total.
-5. El caso de uso termina con el Sistema enviando el recordatorio y emitiendo el mensaje "Recordatorio de deuda pendiente enviado correctamente".
+1. El caso de uso inicia con el Sistema consultado la fecha actual
+2. Si la fecha actual es el día primero del mes, entonces el Sistema consulta el número de cédula de identidad del Residente
+3. El Sistema consulta las dimensiones del departamento donde vive el Residente
+4. El Sistema consulta el valor de alicuota esperada por mes definido por el Presidente/Administrador
+5. El Sistema calcula el valor de alicutoa específico para el Residente
+6. El Sistema genera una deuda con estado "PENDIENTE" de tipo "ALICUOTA" con el valor calculado asociado al Residente.
+7. El caso de uso finaliza con el Sistema enviando la notificación al Residente sobre la deuda de alícuota.
+
 
 ## Escenarios Alternos
 
 ### Escenario Alterno 1
 
-1. El caso de uso inicia cuando el Sistema identifica una obligación de pago en estado "PENDIENTE" o "EN MORA".
-2. El Sistema verifica que la obligación de pago esté asociada a un residente.
-3. SI la obligación de pago NO está asociada a un residente ENTONCES el Sistema emite el mensaje "No existe un residente asociado a la obligación de pago".
-4. El caso de uso termina sin enviar el recordatorio de deuda pendiente.
-
-### Escenario Alterno 2
-
-1. El caso de uso inicia cuando el Sistema identifica una obligación de pago en estado "PENDIENTE" o "EN MORA".
-2. El Sistema verifica que la obligación de pago esté asociada a un residente.
-3. SI la obligación de pago está asociada a un residente ENTONCES el Sistema verifica que el residente tenga un correo electrónico registrado.
-4. SI el residente NO tiene un correo electrónico registrado ENTONCES el Sistema emite el mensaje "No se puede enviar el recordatorio porque el residente no tiene un correo electrónico registrado".
-5. El caso de uso termina sin enviar el recordatorio de deuda pendiente.
+1. El caso de uso inicia con el Sistema consultado la fecha actual
+2. Si la fecha actual NO es el día primero del mes, entonces el caso de uso finaliza sin que el Sistema genera deuda por alícuota.
 
 ---
 
 # Requisito: enviarRecordatorioDeDeudaPendiente
 
-El sistema permitirá enviar un recordatorio al correo electrónico de un residente cuando tenga obligaciones de pago en estado "PENDIENTE" o "EN MORA".
+El sistema enviará semanalmente una notifiación a un Residente cuando tenga deudas en estado "PENDIENTE" o "MORA".
 
 ## Datos del Caso de Uso
 
-- **Actor:** Sistema Automático
-- **Entradas:** obligación de pago en estado "PENDIENTE" o "EN MORA"
+- **Entradas:** número de cedula de identidad del cliente
 - **Salidas:** recordatorio de deuda pendiente y mensaje
 
 ## Escenario Básico
 
-1. El caso de uso inicia cuando el Sistema identifica una obligación de pago en estado "PENDIENTE" o "EN MORA".
-2. El Sistema verifica que la obligación de pago esté asociada a un residente.
-3. SI la obligación de pago está asociada a un residente ENTONCES el Sistema verifica que el residente tenga un correo electrónico registrado.
-4. SI el residente tiene un correo electrónico registrado ENTONCES el Sistema genera un recordatorio con el nombre completo del residente, el identificador del departamento y el saldo pendiente total.
-5. El caso de uso termina con el Sistema enviando el recordatorio y emitiendo el mensaje "Recordatorio de deuda pendiente enviado correctamente".
+1. El caso de uso inicia con el Sistema consultando un Residente por su número de cédula.
+2. El Sistema consulta la fecha actual.
+3. Si el día de la fecha actual es domingo, entonces el Sistema consulta las deudas en estado "PENDIENTE" o "MORA" del Residente
+4. Si el Residente tiene deudas en estado "PENDIENTE" o "MORA", el Sistema envia una notificación al Residente para recordarle sobre el pago de la deuda.
+5. El caso de uso inicia con el Sistema enviando la notificación al cliente.
 
 ## Escenarios Alternos
 
 ### Escenario Alterno 1
 
-1. El caso de uso inicia cuando el Sistema identifica una obligación de pago en estado "PENDIENTE" o "EN MORA".
-2. El Sistema verifica que la obligación de pago esté asociada a un residente.
-3. SI la obligación de pago NO está asociada a un residente ENTONCES el Sistema emite el mensaje "No existe un residente asociado a la obligación de pago".
-4. El caso de uso termina sin enviar el recordatorio de deuda pendiente.
+1. El caso de uso inicia con el Sistema consultando un Residente por su número de cédula.
+2. El Sistema consulta la fecha actual.
+3. Si el día de la fecha actual NO es domingo, entonces el caso de uso finaliza sin que el Sistema realize alguna acción
+
 
 ### Escenario Alterno 2
 
-1. El caso de uso inicia cuando el Sistema identifica una obligación de pago en estado "PENDIENTE" o "EN MORA".
-2. El Sistema verifica que la obligación de pago esté asociada a un residente.
-3. SI la obligación de pago está asociada a un residente ENTONCES el Sistema verifica que el residente tenga un correo electrónico registrado.
-4. SI el residente NO tiene un correo electrónico registrado ENTONCES el Sistema emite el mensaje "No se puede enviar el recordatorio porque el residente no tiene un correo electrónico registrado".
-5. El caso de uso termina sin enviar el recordatorio de deuda pendiente.
+1. El caso de uso inicia con el Sistema consultando un Residente por su número de cédula.
+2. El Sistema consulta la fecha actual.
+3. Si el día de la fecha actual es domingo, entonces el Sistema consulta las deudas en estado "PENDIENTE" o "MORA" del Residente
+4. Si el Residente NO tiene deudas en estado "PENDIENTE" o "MORA", el caso de uso finaliza sin que el Sistema realice alguna acción.
+
+---
+
+# Requisito: registrarMoraDeuda
+
+El sistema cambiará el estado de una deuda a "MORA" si la fecha de pago venció aplicando un interés del 15% sobre el valor a pagar de la deuda.
+
+## Datos del Caso de Uso
+
+- **Entradas:** número de cedula de identidad del cliente
+- **Salidas:** recordatorio de deuda pendiente y mensaje
+
+## Escenario Básico
+
+
+## Escenarios Alternos
+
+
+
+
+---
+
+# Requisito: notificarReporteRendicionCuentas
+
+El sistema notificará a los Residentes que el Presidente generó un reporte de rendición de cuentas entre dos fechas disponible para consulta.
+
+## Datos del Caso de Uso
+
+- **Entradas:** --
+- **Salidas:** recordatorio de deuda pendiente y mensaje
+
+## Escenario Básico
+
+
+## Escenarios Alternos

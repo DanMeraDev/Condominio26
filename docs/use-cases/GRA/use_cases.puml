@@ -12,6 +12,7 @@ skinparam usecase {
 
 actor "Presidente" as Presidente
 actor "Residente" as Residente
+
 actor "Sistema (Automático)" as Sistema
 
 note as N1
@@ -40,6 +41,7 @@ rectangle "Módulo de Pagos y Finanzas" {
     usecase "solicitarPagoCuotas" as SolicitarPagoCuotas
     usecase "eliminarFormaPagoRecurrente" as EliminarFormaPagoRecurrente
     usecase "generarCertificadoNoDeudor" as GenerarCertificadoNoDeudor
+    usecase "guardarDatosBancarios" as GuardarDatosBancarios
     
 
     ' CASOS DE USO COMPARTIDOS
@@ -65,6 +67,7 @@ Residente --> EliminarFormaPagoRecurrente
 Residente --> GenerarCertificadoNoDeudor
 Residente --> RegistrarPagoMensualAlicuotas
 Residente --> ConsultarReporteRendicionCuentas
+Residente --> GuardarDatosBancarios
 
 ' ------------------------
 ' Relaciones del Presidente
@@ -90,5 +93,8 @@ Sistema --> EnviarRecordatorioDeuda
 Sistema --> RegistrarDeudaMensual
 Sistema --> RegistrarMoraDeDeuda
 Sistema --> NotificarReporteRendicionCuentas
+
+
+
 
 @enduml
