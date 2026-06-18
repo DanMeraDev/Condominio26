@@ -35,7 +35,6 @@
 
 ### Casos de uso del Sistema
 
-
 - [registrarDeudaAlicuotaMensual](#requisito-registrardeudamensual)
 - [enviarRecordatorioDeDeudaPendiente](#requisito-enviarrecordatoriodedeudapendiente)
 - [registrarMoraDeuda](#requisito-registrarmoradeuda)

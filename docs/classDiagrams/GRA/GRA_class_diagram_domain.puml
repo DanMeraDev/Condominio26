@@ -1,126 +1,178 @@
-@startuml Diagrama_Dominio_GRA
-skinparam classAttributeIconSize 0
-skinparam shadowing false
-skinparam packageStyle rectangle
+@startuml
+title GRA-FINANZAS - Modelo de Dominio
+
+skinparam roundcorner 8
+skinparam padding 4
+skinparam nodesep 60
+skinparam ranksep 60
 
 skinparam class {
     BackgroundColor #E8F1FF
     BorderColor #2F5EA8
     ArrowColor #2F5EA8
     FontColor #1F3F73
+    HeaderBackgroundColor #D0E2FF
 }
 skinparam enum {
     BackgroundColor #EEF5FF
     BorderColor #1F3F73
     FontColor #1F3F73
 }
-
-package "Entidades del Dominio - Módulo GRA" {
-
-    enum EstadoDeuda {
-        PENDIENTE
-        EN_PROCESO
-        PAGADA
-        MORA
-        ELIMINADA
-    }
-
-    enum MotivoDeuda {
-        ALICUOTA
-        MULTA
-        RESERVA
-    }
-
-    enum MetodoPago {
-        EFECTIVO
-        TRANSFERENCIA
-        TARJETA
-    }
-
-    enum MotivoGasto {
-        SERVICIO_BASICO
-        SUELDOS
-        OTROS
-    }
-
-    enum TipoServicioBasico {
-        AGUA
-        LUZ
-        TELEFONO
-        INTERNET
-    }
-
-    enum TipoReporte {
-        RENDICION_CUENTAS
-    }
-
-    class Residente <<Partial GRB>> {
-        - cedula: String
-        - nombre: String
-        - dimensionesDepartamento: double
-        + getCedula(): String
-        + getDimensiones(): double
-    }
-
-    class Deuda {
-        - idDeuda: String
-        - motivo: MotivoDeuda
-        - valor: double
-        - fechaMaximaPago: Date
-        - descripcion: String
-        - estado: EstadoDeuda
-        + actualizarEstado(nuevoEstado: EstadoDeuda): void
-        + aplicarMora(porcentajeInteres: double): void
-        + modificarFecha(nuevaFecha: Date): void
-        + esVencida(fechaActual: Date): boolean
-    }
-
-    class Pago {
-        - idPago: String
-        - metodo: MetodoPago
-        - fechaPago: Date
-        - comprobanteTransferencia: String
-        + esValidadoPorPlataforma(): boolean
-    }
-
-    class Gasto {
-        - idGasto: String
-        - fechaGasto: Date
-        - valor: double
-        - motivo: MotivoGasto
-        - tipoServicio: TipoServicioBasico
-        - descripcion: String
-    }
-
-    class EntidadBancaria {
-        - nombreEntidad: String
-        - numeroCuenta: String
-        - cedulaTitular: String
-        - tipoCuenta: String
-        - correoTitular: String
-    }
-
-    class Reporte {
-        - idReporte: String
-        - fechaInicio: Date
-        - fechaFin: Date
-        - tipo: TipoReporte
-        - observaciones: String
-        - totalIngresos: double
-        - totalGastos: double
-        + calcularBalanceDiario(): double
-    }
-
-    ' Relaciones Centrales
-    Residente "1" --> "0..*" Deuda : "posee"
-    Deuda "1" -- "0..1" Pago : "se cancela totalmente con"
-    
-    ' Dependencias
-    Deuda .down.> EstadoDeuda : "<<use>>"
-    Deuda .down.> MotivoDeuda : "<<use>>"
-    Pago .down.> MetodoPago : "<<use>>"
-    Gasto .down.> MotivoGasto : "<<use>>"
-    Gasto .down.> TipoServicioBasico : "<<use>>"
-    Reporte .down.> TipoReporte : "<<use>>"
+skinparam interface {
+    BackgroundColor #F4F8FF
+    BorderColor #2F5EA8
+    FontColor #1F3F73
 }
+
+' --- Entidades Externas / Parciales ---
+class Residente <<partial>> {
+    - numero_cedula: String
+}
+
+class Departamento <<partial>> {
+    - tamañoMetrosCuadrados: int
+}
+
+class Parametros <<partial>> {
+    - valorMensualAlicuota: double
+    - tamañoCondominioMetrosCuadrados: int
+}
+
+' --- Núcleo de Deudas ---
+enum EstadoDeuda {
+    PENDIENTE
+    PAGADA
+    EN_PROCESO
+    ELIMINADA
+    MORA
+}
+
+interface ITipoDeuda {
+    + calcularValor(): double
+    + getPrefijo(): String
+}
+
+class Deuda {
+    - idDeuda: int
+    - fecha_vencimiento: Date
+    - descripcion: String
+    - valor: double
+    - estado: EstadoDeuda
+    + calcularValor(): double
+    + cambiarEstadio(): void
+    + modificar_fecha_pago(nuevaFecha: Date): void
+}
+
+class DeudaMulta implements ITipoDeuda {
+    - valorMulta: double
+    + calcularValor(): double
+    + getPrefijo(): String
+}
+
+class DeudaReserva implements ITipoDeuda {
+    - valorReserva: double
+    + calcularValor(): double
+    + getPrefijo(): String
+}
+
+class DeudaAlicuota implements ITipoDeuda {
+    + calcularValor(): double
+    + getPrefijo(): String
+}
+
+' --- Núcleo de Pagos ---
+interface ITipoPago {
+    + pagarDeuda(deuda: Deuda): void
+}
+
+class Pago {
+    - fecha_pago: Date
+    + pagarDeuda(deuda: Deuda): void
+}
+
+class PagoEfectivo implements ITipoPago {
+    + pagarDeuda(deuda: Deuda): void
+}
+
+class PagoTransferencia implements ITipoPago {
+    - comprobante_transferencia: String
+    + pagarDeuda(deuda: Deuda): void
+}
+
+class PagoTarjeta implements ITipoPago {
+    - numero_tarjeta: String
+    - fecha_expiracion: Date
+    - codigo_seguridad: String
+    + pagarDeuda(deuda: Deuda): void
+}
+
+' --- Núcleo de Gastos y Bancos ---
+abstract class Gasto {
+    - descripcion: String
+    - valor: double
+    - fecha_gasto: Date
+}
+
+class GastoServicioBasico extends Gasto {
+    - tipo_servicio: String
+}
+
+class GastoSueldos extends Gasto {}
+class GastoOtros extends Gasto {}
+
+enum tipoEntidadBancaria {
+    AHORROS
+    CORRIENTE
+}
+
+class EntidadBancaria {
+    - nombre: String
+    - numeroCuenta: String
+    - cedulaTitular: String
+    - tipo: String
+    - emailTitular: String
+}
+
+enum CategoriaRubro {
+    INGRESO
+    GASTO
+}
+
+class RendicionCuentas {
+    - idRendicion: int
+    - fechaInicio: Date
+    - fechaFin: Date
+    - observaciones: String
+    - fechaGeneracion: Date
+    - totalIngresos: Date
+    - totalGastos: Date
+    - balance: double
+    + calcularTotalIngresos(): double
+    + calcularTotalGastos(): double
+    + calcularBalance(): double
+}
+
+class DetalleRendicion {
+    - concepto: String 
+    - monto: double
+    - categoria: CategoriaRubro
+}
+
+RendicionCuentas "1" *-- "0..*" DetalleRendicion : contiene
+DetalleRendicion .left.> CategoriaRubro
+
+' --- Relaciones y Dependencias ---
+EntidadBancaria .up.> tipoEntidadBancaria
+
+Deuda "1" *-- "1" ITipoDeuda : tiene
+Pago "1" *-- "1" ITipoPago : utiliza
+
+Deuda "0..*" -left- "1" Residente : pertenece a >
+Deuda "1" -down- "1" Pago: cancelada por >
+
+Departamento "0..*" -right- "1" Residente : habitado por >
+
+DeudaAlicuota "0..*" .up.> "1" Parametros : <<use>>
+
+Deuda .left.> EstadoDeuda
 @enduml
