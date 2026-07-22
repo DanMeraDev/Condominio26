@@ -1,7 +1,7 @@
-package fis.dsw.sgc.reservas.dao;
+package fis.dsw.sgc.inmuebles.dao;
 
 import fis.dsw.sgc.conexion_bd.DBConnection;
-import fis.dsw.sgc.reservas.dto.EspacioReservableDTO;
+import fis.dsw.sgc.inmuebles.dto.EspacioReservableDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +14,7 @@ import java.util.List;
  * Implementacion SQLite del DAO de espacios reservables.
  * Solo realiza consultas de lectura sobre la tabla espacio_comun.
  */
-public class EspacioReservableDAOSQLite implements IEspacioReservableDAO {
+public class EspacioReservableDAO implements IEspacioReservableDAO {
 
     private Connection getConnection() {
         return DBConnection.getInstance().getConnection();

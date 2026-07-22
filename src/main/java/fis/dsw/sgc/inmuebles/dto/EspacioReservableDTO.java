@@ -1,4 +1,4 @@
-package fis.dsw.sgc.reservas.dto;
+package fis.dsw.sgc.inmuebles.dto;
 
 /**
  * DTO de solo lectura con la informacion de un espacio comun que el modulo

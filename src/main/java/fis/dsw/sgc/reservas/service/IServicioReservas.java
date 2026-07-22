@@ -1,6 +1,6 @@
 package fis.dsw.sgc.reservas.service;
 
-import fis.dsw.sgc.reservas.dto.EspacioReservableDTO;
+import fis.dsw.sgc.inmuebles.dto.EspacioReservableDTO;
 import fis.dsw.sgc.reservas.model.Reserva;
 
 import java.util.List;
@@ -21,6 +21,8 @@ import java.util.List;
 public interface IServicioReservas {
 
     // -------- Consultas --------
+    int obtenerIdUsuarioPorCorreo(String correo);
+
     List<Reserva> listarReservasPorUsuario(int idUsuario);
 
     List<Reserva> listarTodasLasReservas();
@@ -34,17 +36,17 @@ public interface IServicioReservas {
     // -------- Comandos --------
 
     /**
-     * Crea una reserva ACTIVA si el residente no tiene deudas en mora y el
-     * horario no se superpone con otra reserva activa del mismo espacio.
-     *
-     * @return true si la reserva se creo; false si fue rechazada (mora o solapamiento).
+     * Registra una nueva reserva para un espacio comun, validando reglas de negocio.
+     * @return null si la creacion fue exitosa, o un String con el mensaje de error si fallo.
      */
-    boolean crearReserva(int idUsuario, int idEspacioComun, String fecha,
-                         String horaInicio, String horaFin);
+    String crearReserva(int idUsuario, int idEspacioComun, String fecha,
+                                 String horaInicio, String horaFin);
 
     boolean cancelarReserva(int idReserva, String motivo);
 
     void registrarObservacion(int idReserva, int idAutor, String texto);
+
+    void solicitarMulta(int idReserva, String motivo);
 
     void finalizarReservasVencidas();
 }

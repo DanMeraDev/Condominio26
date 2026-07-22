@@ -10,6 +10,7 @@ module fis.dsw.sgc {
     requires java.sql;
     requires java.desktop;
     requires javafx.base;
+    requires jbcrypt;
 
 
     // Abre los paquetes con controladores para FXML
