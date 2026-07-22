@@ -33,7 +33,7 @@ public class UsuarioDAOMySQL implements IUsuarioDAO {
 
     @Override
     public Usuario buscarPorCorreo(String correo) {
-        String sql = "SELECT u.nombres, u.apellidos, u.correo, u.telefono, u.id_usuario, "
+        String sql = "SELECT u.nombres, u.apellidos, u.correo, u.telefono, u.id_usuario, u.numero_documento, "
                 + "c.id_cuenta, c.estado AS estado_cuenta "
                 + "FROM usuario u "
                 + "JOIN cuenta c ON c.id_usuario = u.id_usuario "
@@ -49,6 +49,7 @@ public class UsuarioDAOMySQL implements IUsuarioDAO {
 
                 Usuario usuario = new Usuario();
                 usuario.setIdUsuario(rs.getInt("id_usuario"));
+                usuario.setCedula(rs.getString("numero_documento"));
                 usuario.setNombre(rs.getString("nombres"));
                 usuario.setApellido(rs.getString("apellidos"));
                 usuario.setCorreo(rs.getString("correo"));
