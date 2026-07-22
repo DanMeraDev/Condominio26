@@ -2,6 +2,7 @@ package fis.dsw.sgc.check_in.controller;
 
 import fis.dsw.sgc.check_in.dao.ProgramacionVisitaDAO;
 import fis.dsw.sgc.check_in.model.VisitaProgramada;
+import fis.dsw.sgc.check_in.service.IProgramVisitaService;
 import fis.dsw.sgc.check_in.service.ProgramVisitaService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -47,10 +48,27 @@ public class ProgramarVisitaController {
     @FXML private TableColumn<VisitaProgramadaFila, Void> colOpciones;
 
     // ATRIBUTOS DE LA CLASE
-    private final ProgramVisitaService programVisitaService = new ProgramVisitaService(new ProgramacionVisitaDAO());
+    private IProgramVisitaService programVisitaService;
     private Map<String, Integer> mapaResidentes;
     private Map<Integer, String> mapaNombresResidentes;
     private final ObservableList<VisitaProgramadaFila> visitas = FXCollections.observableArrayList();
+
+    public ProgramarVisitaController() {
+        this(new ProgramVisitaService(new ProgramacionVisitaDAO()));
+    }
+
+    public ProgramarVisitaController(IProgramVisitaService programVisitaService) {
+        this.programVisitaService = programVisitaService;
+    }
+
+    /** Setter para DI manual por mainWindowController tras FXMLLoader */
+    public void setProgramVisitaService(IProgramVisitaService programVisitaService) {
+        this.programVisitaService = programVisitaService;
+    }
+
+    public IProgramVisitaService getProgramVisitaService() {
+        return programVisitaService;
+    }
 
     @FXML
     public void initialize() {
