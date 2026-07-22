@@ -1,6 +1,11 @@
 package fis.dsw.sgc.check_in.controller;
 
-import java.util.Map;
+import fis.dsw.sgc.check_in.exception.CheckInException;
+import fis.dsw.sgc.check_in.model.TipoAlerta;
+import fis.dsw.sgc.check_in.model.TipoAlertaAvisoGeneral;
+import fis.dsw.sgc.check_in.model.TipoAlertaEmergencia;
+import fis.dsw.sgc.check_in.model.TipoAlertaSimulacro;
+import fis.dsw.sgc.check_in.service.IAlertaSeguridadService;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -12,6 +17,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.util.Map;
 
 public class EnviarAlertaController {
 
@@ -36,7 +43,6 @@ public class EnviarAlertaController {
     @FXML private Label lblPrioridad;
     @FXML private ChoiceBox<String> cbDestinatarios;
 
-    // Controles dinámicos
     @FXML private Label lblDestinatarioDinamico;
     @FXML private ComboBox<String> cbTorreBloque;
     @FXML private HBox boxBuscarResidente;
@@ -46,12 +52,30 @@ public class EnviarAlertaController {
     @FXML private Label lblMensajeEstado;
     @FXML private Label lblResumen;
 
+    private IAlertaSeguridadService alertaSeguridadService;
+
+    public EnviarAlertaController() {
+        this(new fis.dsw.sgc.check_in.service.AlertaSeguridadServiceImpl());
+    }
+
+    public EnviarAlertaController(IAlertaSeguridadService alertaSeguridadService) {
+        this.alertaSeguridadService = alertaSeguridadService;
+    }
+
+    /** Setter para DI manual por mainWindowController tras FXMLLoader */
+    public void setAlertaSeguridadService(IAlertaSeguridadService alertaSeguridadService) {
+        this.alertaSeguridadService = alertaSeguridadService;
+    }
+
+    public IAlertaSeguridadService getAlertaSeguridadService() {
+        return alertaSeguridadService;
+    }
+
     @FXML
     public void initialize() {
         cbTipoAlerta.setItems(FXCollections.observableArrayList(EMERGENCIA, SIMULACRO, AVISO_GENERAL));
         cbDestinatarios.setItems(FXCollections.observableArrayList(TODOS, TORRE, UNIDAD));
 
-        // Datos de ejemplo para el ComboBox
         cbTorreBloque.setItems(FXCollections.observableArrayList("Torre A", "Torre B", "Bloque P-01", "Bloque P-02"));
 
         cbTipoAlerta.getSelectionModel().selectedItemProperty().addListener((obs, old, tipo) -> actualizarPrioridad(tipo));
@@ -82,7 +106,7 @@ public class EnviarAlertaController {
         boxBuscarResidente.setManaged(esUnidad);
 
         if (esTorre) lblDestinatarioDinamico.setText("Seleccione Torre / Bloque");
-        if (esUnidad) lblDestinatarioDinamico.setText("Identificación");
+        if (esUnidad) lblDestinatarioDinamico.setText("Identificación del Residente");
     }
 
     @FXML
@@ -142,9 +166,37 @@ public class EnviarAlertaController {
 
     @FXML
     void confirmarEnvio(ActionEvent event) {
-        cancelarConfirmacion(event);
-        mostrarExito("Alerta enviada correctamente a los destinatarios seleccionados.");
-        limpiarFormulario(null);
+        if (alertaSeguridadService == null) {
+            mostrarError("El servicio de alertas no ha sido inyectado.");
+            return;
+        }
+
+        String nombreTipo = cbTipoAlerta.getValue();
+        TipoAlerta tipoAlerta;
+
+        if (EMERGENCIA.equalsIgnoreCase(nombreTipo)) {
+            tipoAlerta = new TipoAlertaEmergencia();
+        } else if (SIMULACRO.equalsIgnoreCase(nombreTipo)) {
+            tipoAlerta = new TipoAlertaSimulacro();
+        } else {
+            tipoAlerta = new TipoAlertaAvisoGeneral();
+        }
+
+        String destinatarioTipo = cbDestinatarios.getValue();
+        String identificadorDestino = UNIDAD.equals(destinatarioTipo) ? txtIdentificacionResidente.getText().trim() : cbTorreBloque.getValue();
+
+        try {
+            int idUsuarioActual = 1;
+            if (fis.dsw.sgc.core.session.SesionUsuario.obtenerInstancia().getUsuarioActual() != null) {
+                idUsuarioActual = fis.dsw.sgc.core.session.SesionUsuario.obtenerInstancia().getUsuarioActual().getIdUsuario();
+            }
+            alertaSeguridadService.emitirAlerta(tipoAlerta, destinatarioTipo, identificadorDestino, txtMensaje.getText().trim(), idUsuarioActual);
+            cancelarConfirmacion(event);
+            mostrarExito("Alerta enviada correctamente y registrada en las notificaciones del sistema.");
+            limpiarFormulario(null);
+        } catch (CheckInException e) {
+            mostrarError(e.getMessage());
+        }
     }
 
     @FXML
