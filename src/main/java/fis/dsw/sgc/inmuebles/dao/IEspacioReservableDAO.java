@@ -1,6 +1,6 @@
-package fis.dsw.sgc.reservas.dao;
+package fis.dsw.sgc.inmuebles.dao;
 
-import fis.dsw.sgc.reservas.dto.EspacioReservableDTO;
+import fis.dsw.sgc.inmuebles.dto.EspacioReservableDTO;
 
 import java.util.List;
 

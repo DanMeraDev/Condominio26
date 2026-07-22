@@ -51,13 +51,13 @@ VALUES
 INSERT OR IGNORE INTO cuenta
 (id_cuenta, id_usuario, nombre_usuario, hash_contrasena, estado, intentos_fallidos, fecha_creacion)
 VALUES
-(1, 1, 'admin', 'HASH_DEMO_ADMIN_1234', 'ACTIVA', 0, CURRENT_TIMESTAMP),
-(2, 2, 'carlos', 'HASH_DEMO_CARLOS_1234', 'ACTIVA', 0, CURRENT_TIMESTAMP),
-(3, 3, 'maria', 'HASH_DEMO_MARIA_1234', 'ACTIVA', 0, CURRENT_TIMESTAMP),
-(4, 4, 'guardia', 'HASH_DEMO_GUARDIA_1234', 'ACTIVA', 0, CURRENT_TIMESTAMP),
-(5, 5, 'presidenta', 'HASH_DEMO_PRESIDENTA_1234', 'ACTIVA', 0, CURRENT_TIMESTAMP),
-(6, 6, 'jorge', 'HASH_DEMO_JORGE_1234', 'ACTIVA', 0, CURRENT_TIMESTAMP),
-(7, 7, 'sofia', 'HASH_DEMO_SOFIA_1234', 'ACTIVA', 0, CURRENT_TIMESTAMP);
+(1, 1, 'admin', '$2a$10$0gVnFsGi7I7bwYolUNx87ucpC2rTyGkdecy2v2owmeHn0vwDHgDD.', 'ACTIVA', 0, CURRENT_TIMESTAMP),
+(2, 2, 'carlos', '$2a$10$uFfz111cpUIFWm8aw6oth.njWnXTgTA6vWb0ZuNBmTvECwA0GCymK', 'ACTIVA', 0, CURRENT_TIMESTAMP),
+(3, 3, 'maria', '$2a$10$DND7xAw/rvaYoG..Pl0FpOqKoV0pLJhwLxPZuL/xsXoSvLmsYHBMi', 'ACTIVA', 0, CURRENT_TIMESTAMP),
+(4, 4, 'guardia', '$2a$10$2vJ1zJ62esys9NVk3Jdgs.ZfRrcTqgL2Cg4ljZGEDBDg5nvh.nI8q', 'ACTIVA', 0, CURRENT_TIMESTAMP),
+(5, 5, 'presidenta', '$2a$10$T73cIdHQ.xD4WVHZFXvnzuEr4Hhw5mZdQ8mhycJgkVCYYi78TH0NS', 'ACTIVA', 0, CURRENT_TIMESTAMP),
+(6, 6, 'jorge', '$2a$10$FI6VITZKb8LojQt9LKXoDOz7TLmZKVhR2c3fbFMy17L4dgGUluyO2', 'ACTIVA', 0, CURRENT_TIMESTAMP),
+(7, 7, 'sofia', '$2a$10$PVaRJ7EOhAtARYumAM2n2uyC7nr7gyn1ZRVowL5G4uf6I.T5bjlqS', 'ACTIVA', 0, CURRENT_TIMESTAMP);
 
 INSERT OR IGNORE INTO usuario_rol (id_usuario, id_rol) VALUES
 (1,1),
@@ -310,78 +310,204 @@ VALUES
 (1, 3, 4, 'VERIFICACION',
  'Se verificó identidad del técnico externo antes del ingreso',
  'BAJA', '2026-07-20 11:10:00', 'CERRADA');
-
 -- ============================================================
 -- GRF - COMUNICACIONES Y NOTIFICACIONES
 -- ============================================================
 
 INSERT OR IGNORE INTO mensaje
-(id_mensaje, id_emisor, asunto, contenido, tipo,
- fecha_creacion, fecha_envio, estado)
+(
+    id_mensaje,
+    id_emisor,
+    asunto,
+    contenido,
+    tipo,
+    prioridad,
+    fecha_creacion,
+    fecha_envio,
+    estado
+)
 VALUES
-(1, 1, 'Mantenimiento de piscina',
- 'La piscina permanecerá cerrada el sábado de 08:00 a 12:00 por mantenimiento.',
- 'MENSAJE_RESIDENTES', '2026-07-17 08:00:00',
- '2026-07-17 08:05:00', 'ENVIADO'),
-(2, 5, 'Reunión general de copropietarios',
- 'La reunión general se realizará el próximo viernes a las 19:00.',
- 'MENSAJE_GLOBAL', '2026-07-16 17:00:00',
- '2026-07-16 17:10:00', 'ENVIADO'),
-(3, 4, 'Alerta de seguridad',
- 'Se solicita verificar que las puertas de acceso permanezcan cerradas.',
- 'MENSAJE_URGENTE', '2026-07-18 06:30:00',
- '2026-07-18 06:35:00', 'ENVIADO');
+(
+    1,
+    1,
+    'Mantenimiento de piscina',
+    'La piscina permanecerá cerrada el sábado de 08:00 a 12:00 por mantenimiento.',
+    'MENSAJE_RESIDENTES',
+    'NORMAL',
+    '2026-07-17 08:00:00',
+    '2026-07-17 08:05:00',
+    'ENVIADO'
+),
+(
+    2,
+    5,
+    'Reunión general de copropietarios',
+    'La reunión general se realizará el próximo viernes a las 19:00.',
+    'MENSAJE_GLOBAL',
+    'ALTA',
+    '2026-07-16 17:00:00',
+    '2026-07-16 17:10:00',
+    'ENVIADO'
+),
+(
+    3,
+    4,
+    'Alerta de seguridad',
+    'Se solicita verificar que las puertas de acceso permanezcan cerradas.',
+    'MENSAJE_URGENTE',
+    'URGENTE',
+    '2026-07-18 06:30:00',
+    '2026-07-18 06:35:00',
+    'ENVIADO'
+);
+
 
 INSERT OR IGNORE INTO mensaje_destinatario
-(id_mensaje, id_usuario, leido, fecha_lectura)
+(
+    id_mensaje,
+    id_usuario,
+    leido,
+    fecha_lectura
+)
 VALUES
-(1,2,1,'2026-07-17 09:00:00'),
-(1,3,0,NULL),
-(1,6,1,'2026-07-17 10:15:00'),
-(1,7,0,NULL),
-(2,2,1,'2026-07-16 18:00:00'),
-(2,3,1,'2026-07-16 18:20:00'),
-(2,5,1,'2026-07-16 17:15:00'),
-(2,6,0,NULL),
-(2,7,0,NULL),
-(3,1,1,'2026-07-18 06:40:00'),
-(3,4,1,'2026-07-18 06:36:00');
+(1, 2, 1, '2026-07-17 09:00:00'),
+(1, 3, 0, NULL),
+(1, 6, 1, '2026-07-17 10:15:00'),
+(1, 7, 0, NULL),
+
+(2, 2, 1, '2026-07-16 18:00:00'),
+(2, 3, 1, '2026-07-16 18:20:00'),
+(2, 5, 1, '2026-07-16 17:15:00'),
+(2, 6, 0, NULL),
+(2, 7, 0, NULL),
+
+(3, 1, 1, '2026-07-18 06:40:00'),
+(3, 4, 1, '2026-07-18 06:36:00');
+
 
 INSERT OR IGNORE INTO anuncio
-(id_anuncio, id_autor, titulo, contenido, fecha_publicacion,
- fecha_expiracion, prioridad, estado)
+(
+    id_anuncio,
+    id_autor,
+    titulo,
+    contenido,
+    tipo,
+    fecha_publicacion,
+    fecha_expiracion,
+    prioridad,
+    estado
+)
 VALUES
-(1, 5, 'Asamblea general',
- 'Se convoca a todos los propietarios a la asamblea general.',
- '2026-07-16 17:00:00', '2026-07-30 23:59:59', 'ALTA', 'PUBLICADO'),
-(2, 1, 'Uso responsable de espacios comunes',
- 'Recordamos respetar los horarios y reglamentos de cada espacio.',
- '2026-07-15 09:00:00', '2026-08-15 23:59:59', 'NORMAL', 'PUBLICADO');
+(
+    1,
+    5,
+    'Asamblea general',
+    'Se convoca a todos los propietarios a la asamblea general.',
+    'ANUNCIO_GENERAL',
+    '2026-07-16 17:00:00',
+    '2026-07-30 23:59:59',
+    'ALTA',
+    'PUBLICADO'
+),
+(
+    2,
+    1,
+    'Uso responsable de espacios comunes',
+    'Recordamos respetar los horarios y reglamentos de cada espacio.',
+    'ANUNCIO_GENERAL',
+    '2026-07-15 09:00:00',
+    '2026-08-15 23:59:59',
+    'NORMAL',
+    'PUBLICADO'
+);
+
 
 INSERT OR IGNORE INTO notificacion
-(id_notificacion, id_usuario, id_mensaje, id_anuncio, tipo,
- titulo, contenido, fecha_creacion, fecha_envio, leida, fecha_lectura)
+(
+    id_notificacion,
+    id_usuario,
+    id_mensaje,
+    id_anuncio,
+    tipo,
+    titulo,
+    contenido,
+    fecha_creacion,
+    fecha_envio,
+    leida,
+    fecha_lectura,
+    estado
+)
 VALUES
-(1, 2, 1, NULL, 'MENSAJE',
- 'Mantenimiento de piscina',
- 'La piscina tendrá mantenimiento programado.',
- '2026-07-17 08:05:00', '2026-07-17 08:05:00', 1, '2026-07-17 09:00:00'),
-(2, 3, NULL, 1, 'ANUNCIO',
- 'Asamblea general',
- 'Revisa la convocatoria a la asamblea general.',
- '2026-07-16 17:05:00', '2026-07-16 17:05:00', 0, NULL),
-(3, 6, NULL, NULL, 'RESERVA',
- 'Reserva finalizada',
- 'Tu reserva del Área BBQ fue marcada como finalizada.',
- '2026-07-12 16:35:00', '2026-07-12 16:35:00', 1, '2026-07-12 17:00:00'),
-(4, 2, NULL, NULL, 'DEUDA',
- 'Nueva deuda generada',
- 'Se generó una deuda por la reserva del Salón de Eventos.',
- '2026-07-15 09:10:00', '2026-07-15 09:10:00', 0, NULL),
-(5, 1, 3, NULL, 'ALERTA',
- 'Alerta de seguridad',
- 'Existe una alerta de seguridad activa.',
- '2026-07-18 06:35:00', '2026-07-18 06:35:00', 1, '2026-07-18 06:40:00');
+(
+    1,
+    2,
+    1,
+    NULL,
+    'MENSAJE',
+    'Mantenimiento de piscina',
+    'La piscina tendrá mantenimiento programado.',
+    '2026-07-17 08:05:00',
+    '2026-07-17 08:05:00',
+    1,
+    '2026-07-17 09:00:00',
+    'LEIDA'
+),
+(
+    2,
+    3,
+    NULL,
+    1,
+    'ANUNCIO',
+    'Asamblea general',
+    'Revisa la convocatoria a la asamblea general.',
+    '2026-07-16 17:05:00',
+    '2026-07-16 17:05:00',
+    0,
+    NULL,
+    'ENVIADA'
+),
+(
+    3,
+    6,
+    NULL,
+    NULL,
+    'RESERVA',
+    'Reserva finalizada',
+    'Tu reserva del Área BBQ fue marcada como finalizada.',
+    '2026-07-12 16:35:00',
+    '2026-07-12 16:35:00',
+    1,
+    '2026-07-12 17:00:00',
+    'LEIDA'
+),
+(
+    4,
+    2,
+    NULL,
+    NULL,
+    'DEUDA',
+    'Nueva deuda generada',
+    'Se generó una deuda por la reserva del Salón de Eventos.',
+    '2026-07-15 09:10:00',
+    '2026-07-15 09:10:00',
+    0,
+    NULL,
+    'ENVIADA'
+),
+(
+    5,
+    1,
+    3,
+    NULL,
+    'ALERTA',
+    'Alerta de seguridad',
+    'Existe una alerta de seguridad activa.',
+    '2026-07-18 06:35:00',
+    '2026-07-18 06:35:00',
+    1,
+    '2026-07-18 06:40:00',
+    'LEIDA'
+);
 
 -- ============================================================
 -- VALIDACIONES RÁPIDAS
